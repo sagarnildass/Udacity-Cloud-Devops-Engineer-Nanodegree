@@ -1,0 +1,104 @@
+1. What is (Cloud) Infrastructure?
+	
+	- Cloud services are broadly categorized as Software as a Service (SaaS), Platform as a Service (PaaS), or Infrastructure as a Service (IaaS). Cloud is a collection of geographically distributed data centers that are logically grouped into regions and availability-zones.
+
+	- The IaaS allows a user to provision Virtual Machines (VMs), set up networks (VPC), create subnets, and associate necessary security features. Further, VMs can be attached to storage volumes, different networks, or servers. All the resources mentioned above are referred to as Infrastructure.
+
+
+2. DevOps is the combination of industry best practices, and set of tools that improve an organization’s ability to:
+
+	- Increase the speed of software delivery
+	- Increases the speed of software evolution
+	- Have better reliability of the software
+	- Have scalability using automation,
+	- Improved collaboration among teams.
+	
+3. Issues that DevOps tries to solve:
+	- Unpredictable deployments
+	- Mismatched environments (development doesn’t match production)
+	- Configuration Drift
+	
+4. DevOps best practices and tools
+	
+	- One of the benefits of using DevOps is that it allows predictable deployments using automated scripts. In the DevOps model, development and operations teams are merged into a single team. These DevOps teams use a few tools and best practices that deploy and manage configuration changes to servers. Stackexchange has a discussion post detailing the difference between DevOps tools vs. Software Configuration Tools.
+
+	- The most important practices are:
+
+		- Continuous Integration / Continuous Delivery (CI/CD) - new features are automatically deployed with all the required dependencies.
+		- Infrastructure as Code (IaaC) - configuration and management of cloud infrastructure using re-usable scripts.
+
+	- Other prevalent practices are:
+
+		- Microservices
+		- Monitoring and Logging
+		- Communication and Collaboration
+		
+5. Glossary
+	- Continuous Integration Continuous Deployment (CI/CD): Tracks the development workflow from testing through production. Continuous integration is the process flow of testing any change made to your development flow, while continuous deployment tracks those changes through to staging and production systems. You may like to read this article by Atlassian.com that describes CI/CD in detail.
+
+	- Infrastructure as code (IaaC): Provision and manages the cloud-infrastructure by using scripts. These scripts can be written in YAML or JSON format. These scripts ensure that the same architecture can be re-built multiple numbers of times. These scripts are particularly useful in enterprise applications and different environments - dev, prod, or test. Read more here.
+	
+6. Deciding Access Privileges within AWS
+	- Programmatic Access
+		-In the AWS console, choose "programmatic access." This allows us to use code to interact with AWS, instead of relying on mouse clicking in the console web pages.
+
+	- Administrator Access
+		- For IAM access, choose “administrator access.” This is just for initial setup of your account. Afterwards, you’ll want to limit access to only what you need.
+
+	- Dev and Prod user accounts
+		- In practice, Dev and DevOps members may have separate user accounts for the dev environment as opposed to the production environment. This makes it easier for developers by giving them wider privileges in the dev environment that would normally only be reserved for DevOps members in the production environment.
+
+	- Access Key ID and Secret Access Keys
+		- Remember not to save these in your code or to check into any repositories. Keep these private to you.
+		
+7. Additional Access Keys
+	- Note that each user can have up to 2 access keys at the same time.
+
+	- Why Making Keys Inactive is a Better Choice
+	    - You may make your access key temporarily inactive rather than destroying it and creating a new one. This may be helpful if you want to stop an automated process that uses that key (for example, a CI/CD process).
+	    
+	    
+8. CloudFormation: CloudFormation is a declarative language, not an imperative language.
+
+	- CloudFormation handles resource dependencies so that you don’t have to specify which resource to start up before another. There are cases where you can specify that a resource depends on another resource, but ideally, you’ll let CloudFormation take care of dependencies.
+	- VPC is the smallest unit of resource.
+
+	- Glossary
+		- Declarative languages: These languages specify what you want, without requiring you to specify how to get it. An example of a popular declarative language is SQL.
+		- Imperative languages: These languages use statements to change the state of the program.
+
+9. YAML and JSON: YAML and JSON file formats are both supported in CloudFormation, but YAML is the industry preferred version that’s used for AWS and other cloud providers (Azure, Google Cloud Platform). An important note about YAML files: the whitespace indentation matters! We recommend that you use four white spaces for each indentation.
+
+	- Glossary in CloudFormation scripts
+		- Name: A name you want to give to the resource (does this have to be unique across all resource types?)
+		- Type: Specifies the actual hardware resource that you’re deploying.
+		- Properties: Specifies configuration options for your resource. Think of these as all the drop-down menus and checkbox options that you would see in the AWS console if you were to request the resource manually.
+		- Stack: A stack is a group of resources. These are the resources that you want to deploy, and that are specified in the YAML file.
+
+	- Best practices
+		- Coding best practice: Create separate files to organize your code. You can either create separate files for similar resources or create files for each developer who uses those resources.
+
+	- Documentation for CloudFormation syntax
+		- You don't need to memorize the code that you need for each resource. You can find sample code in the documentation for CloudFormation for examples of how to write your CloudFormation scripts.
+		
+10. How to run CloudFormation
+	For this example, we’ll assume your CloudFormation file name is called testcfn.yml, and you’re giving your stack the name myfirsttest.
+	In the terminal, to use your yml code to request the resources, type the following in the same directory as your yml file:
+
+	a) aws cloudformation create-stack --stack-name myfirsttest --region ap-south-1 --template-body file://testcfn.yml
+
+- Alternatively, you can write a shell script (.sh) file as:
+
+	b) aws cloudformation create-stack --stack-name $1 --template-body file://$2  --parameters file://$3 --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM" --region=ap-south-1
+	
+	where $1, $2, and $3 can be replaced with the actual values. Note the --parameters and --capabilities options that we will learn in the upcoming lesson.
+
+	c) You can also try a batch script (.bat) with a similar syntax, except that the actual values can be written as %1 instead as$1.
+
+You may also want to use update-stack when you want to update an existing stack instead of destroying your stack and creating a new one. The syntax is similar to before:
+
+	d) aws cloudformation update-stack --stack-name $1 --template-body file://$2  --parameters file://$3 --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM" --region=ap-south-1
+	
+You can go to cloudformation to confirm if this indeed got created.
+	
+
