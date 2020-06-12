@@ -1,0 +1,222 @@
+1. Storage in the Cloud: Storage and database services in the cloud provide a place for companies to collect, store, and analyze the data they've collected over the years at a massive scale.
+
+	- Storage & Database Services
+		- Amazon Simple Storage Service (Amazon S3)
+		- Amazon Simple Storage Service (Amazon S3) Glacier
+		- DynamoDB
+		- Relational Database Service (RDS)
+		- Redshift
+		- ElastiCache
+		- Neptune
+		- Amazon DocumentDB
+		
+2. S3 & S3 Glacier: Amazon Simple Storage Service (or S3) is an object storage system in the cloud.
+
+	- Storage Classes: S3 offers several storage classes, which are different data access levels for your data at certain price points.
+
+		- S3 Standard
+		- S3 Glacier - For archieving (e.g. log files for auditing)
+		- S3 Glacier Deep Archive
+		- S3 Intelligent-Tiering
+		- S3 Standard Infrequent Access
+		- S3 One Zone-Infrequent Access
+	
+	- Tips
+		
+		- S3 is found under the Storage section on the AWS Management Console.
+		- A single object can be up to 5 terabytes in size.
+		- You can enable Multi-Factor Authentication (MFA) Delete on an S3 bucket to prevent accidental deletions.
+		- S3 Acceleration can be used to enable fast, easy, and secure transfers of files over long distances between your data source and your S3 bucket.
+		- For static web page hosting, s3 can be a very good choice.
+		
+3. DynamoDB: DynamoDB is a NoSQL document database service that is fully managed. Unlike traditional databases, NoSQL databases, are schema-less. Schema-less simply means that the database doesn't contain a fixed (or rigid) data structure.
+
+
+	- Tips
+		- DynamoDB is found under the Database section on the AWS Management Console.
+		- DynamoDB can handle more than 10 trillion requests per day.
+		- DynamoDB is serverless as there are no servers to provision, patch, or manage.
+		- DynamoDB supports key-value and document data models.
+		- DynamoDB synchronously replicates data across three AZs in an AWS Region.
+		- DynamoDB supports GET/PUT operations using a primary key.
+		
+4. Dynamo DB lab
+
+A) DynamoDB
+	- In this hands-on exercise, you will create a NoSQL database in the cloud.
+
+B) Prerequisites:
+	- AWS Account
+	- Topics Covered:
+	- By the end of this lab, you will be able to:
+
+		a) Create a table
+		b) Add data to a table
+		c) Query data in a table
+
+C) Steps:
+	a) Access the DynamoDB service from AWS Management Console
+		- On the AWS Management Console page, type "dynamo" in the Find Services box and then select DynamoDB.
+		- On the DynamoDB Console, click Create table.
+		- Enter Course as the Table name.
+		- Enter Name in for the Partition key and ensure String is selected. Note: The partition key spreads data against partitions for scalability.
+		- Keep the remainder of the defaults, and click the Create button.
+
+	b) Add Data to the Table
+		- Once the table is created, click on the Items tab.
+		- Click Create item.
+			- In the data entry window, type the following:
+				- For name, enter, Course 1 and click Save
+				- Click the +icon to add additional fields:
+				- Select Insert
+				- Select String
+				- For the field name, enter Teacher
+				- For the value, enter Kesha Williams
+				- Click Save
+		- Follow the same process to add 5 more documents.
+		
+	c) Query Data in a Table
+		- In the dropdown that contains Scan, change it to Query.
+		- Where it says Enter value, in the row next to the name Partition key, enter Course 1 and click Start Search.
+		- You should see your search results appear in the window.
+		
+	d) Cleanup and delete resources
+		- To clean up the resources to avoid recurring charges, ensure the table name is selected.
+		- Click on the Delete table button.
+		- Ensure Delete all CloudWatch alarms for this table is selected and click Delete.
+		
+5. Relational Database Service (RDS): RDS (or Relational Database Service) is a service that aids in the administration and management of databases. RDS assists with database administrative tasks that include upgrades, patching, installs, backups, monitoring, performance checks, security, etc.
+
+
+	- Database Engine Support
+		- Oracle
+		- PostgreSQL
+		- MySQL
+		- MariaDB
+		- SQL Server
+		
+	- Features
+		- failover
+		- backups
+		- restore
+		- encryption
+		- security
+		- monitoring
+		- data replication
+		- scalability
+		
+6. Redshift: Redshift is a cloud data warehousing service to help companies manage big data. Redshift allows you to run fast queries against your data using SQL, ETL, and BI tools. Redshift stores data in a column format to aid in fast querying.
+
+	- Tips
+		- Redshift can be found under the Database section on the AWS Management Console.
+		- Redshift delivers great performance by using machine learning.
+		- Redshift Spectrum is a feature that enables you to run queries against data in Amazon S3.
+		- Redshift encrypts and keeps your data secure in transit and at rest.
+		- Redshift clusters can be isolated using Amazon Virtual Private Cloud (VPC).
+		
+7. Relational Database Service (RDS) LAB
+
+	a) Topics Covered:By the end of this lab, you will be able to:
+	
+		- Launch a MySQL database
+	
+	b) Steps:
+		i) Launch MySQL Database
+
+			- On the AWS Management Console page, type rds in the Find Services box and then select RDS.
+			- On the left-hand side, click Databases.
+			- Click Create database.
+			- Under engines option, select MySQL and click the Next button
+			- Under Instance specifications, leave the defaults.
+			- Under the Settings section:
+
+			- Enter a name for the instance under DB instance identifier
+			- Note: This will not be the database name.
+
+			- Enter a Master username
+			- Enter a Master password and confirm the password.
+			- Click Next
+			- For Virtual Private Cloud (VPC), select Create new VPC.
+			- Ensure Create new DB Subnet Group is selected.
+			- Leave the defaults for Subnet group, Public accessibility, Availability zone, and VPC security groups.
+			- Under Database options, enter a Database name and leave the rest as defaults.
+			- Under Deletion protection, uncheck Enable deletion protection. Important: In a real production scenario, you would leave this option checked.
+			- Click Create database.
+			
+		ii) View Instance Details
+			- Once your database is created, open it by clicking on View DB Instance details.
+			- Make sure the DB instance status shows available.
+			- Scroll through and observe how the instance is configured.
+			
+		iii) Delete Database Instance Clean up the resources to avoid recurring charges.
+			- From the RDS Dashboard homepage, select Databases from the left-hand navigation pane.
+			- Select your newly created database by clicking on the name radio button next to the name.
+			- From the Actions menu, select Delete.
+			- In the confirmation popup:
+			- Uncheck Create final snapshot
+			- Select I acknowledge that upon instance deletion, automated backups, including system snapshots and point-in-time recovery, will no longer be available.
+			- Enter the requested confirmation for deletion.
+			- Click the Delete button
+			
+8. Cloud Front: CloudFront is used as a global content delivery network (CDN). Cloud Front speeds up the delivery of your content through Amazon's worldwide network of mini-data centers called Edge Locations. CloudFront works with other AWS services, as shown below, as an origin source for your application:
+
+	- Amazon S3
+	- Elastic Load Balancing
+	- Amazon EC2
+	- Lambda@Edge
+	- AWS Shield
+
+	- Tips
+		- CloudFront is found under the Networking & Content Delivery section on the AWS Management Console.
+		- Amazon countinously adds new Edge Locations.
+		- CloudFront ensures that end-user requests are served from the closest edge location.
+		- CloudFront works with non-AWS origin sources.
+		- You can use GeoIP blocking to serve content (or not serve content) to specific countries.
+		- Cache control headers determine how frequently CloudFront needs to check the origin for an updated version your file.
+		- The maximum size of a single file that can be delivered through Amazon CloudFront is 20 GB.
+		
+9. S3 and CloudFront Lab: In this hands-on exercise, you will create a S3 bucket with a Cloud Front distribution to speed up our the delivery of content to our website.
+
+	1) Prerequisites:
+		- AWS Account
+		- Topics Covered:
+	
+	2) By the end of this lab, you will be able to:
+
+		- Create and configure a bucket
+		- Upload an object to a bucket
+		- Create distribution
+	3) Steps:
+
+		A. Create S3 Bucket
+			- On the AWS Management Console page, type S3 in the Find Services box and then select S3.
+			- Click Create bucket
+			- Enter a Bucket name.
+			- Note: Bucket names must be globally unique.
+			- Click the Create button.
+			- Once the bucket is created, click on the name of the bucket to open the bucket to the contents.
+		B. Upload Object to Bucket
+			- Once the bucket is open to its contents, click the Upload button.
+			- Click the Add Files button.
+			- Select a file from your local computer to upload.
+			- Click Open.
+			- Click Upload.
+		C. Create CloudFront Distribution
+			- Select Services from the top left corner.
+			- Enter cloud front in the Find a service by name or feature text box and select Cloud Front.
+			- Click Create Distribution.
+			- Under the Web delivery method, select Get Started.
+			- Under Origin Settings:
+			- Under Origin Domain Name, select the S3 bucket that you just created.
+			- Under Origin Path, enter / to indicate the root level.
+			- Leave the defaults for the rest of the options.
+			- Click Create Distribution.
+			- Note: It may take up to 10 minutes for the CloudFront Distribution to be created.
+		D. Delete Bucket and Distribution
+			- To delete the Cloud Front distribution, click on the radio button next to the Delivery Method for the distribution. Click Disable and then Yes, Disable. Click Close.
+			- Once the distribution is disabled, you can delete it by selecting the radio button next to the Delivery Method and clicking the Delete button.
+			- To delete the S3 bucket, navigate to S3, but clicking on Services and typing S3 in the Find Services box and then select S3.
+			- Select the radio button next to the name of the bucket you want to delete.
+			- Click Delete.
+			- Type the name of the bucket to confirm deletion.
+			- Click the Confirm button.
