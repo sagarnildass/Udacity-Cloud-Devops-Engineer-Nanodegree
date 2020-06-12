@@ -9,3 +9,4 @@
 - [Lesson 5: Networking & ELasticity](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_1_cloud_fundamentals/lesson_5_networking_and_elasticity)
 - [Lesson 6: Messaging & Containers](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_1_cloud_fundamentals/lesson_6_messaging_and_containers)
 - [Lesson 7: AWS Management](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_1_cloud_fundamentals/lesson_7_aws_management)
+- [Project 1: Deploy a Static website on AWS](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_1_cloud_fundamentals/Project_1_deploy_static_website_to_AWS)
