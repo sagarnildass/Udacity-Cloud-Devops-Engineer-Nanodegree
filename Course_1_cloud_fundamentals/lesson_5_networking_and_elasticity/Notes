@@ -1,0 +1,118 @@
+1. Networking: Networks reliably carry loads of data around the globe allowing for the delivery of content and applications with high availability. The network is the foundation of your infrastructure.
+
+	- Cloud networking includes:
+
+		- network architecture
+		- network connectivity
+		- application delivery
+		- global performance
+		- delivery
+		
+2. Route 53: Route 53 is a cloud domain name system (DNS) service that has servers distributed around the globe used to translates human-readable names like www.google.com into the numeric IP addresses like 74.125.21.147.
+
+	- Features
+		- scales automatically to manage spikes in DNS queries
+		- allows you to register a domain name (or manage an existing)
+		- routes internet traffic to the resources for your domain
+		- checks the health of your resources
+	- Tips
+		- Route 53 is found under the Networking & Content Delivery section on the AWS Management Console.
+		- Route 53 allows you to route users based on the user’s geographic location.
+		
+3. Elasticity in the Cloud: One of the main benefits of the cloud is that it allows you to stop guessing about capacity when you need to run your applications. Sometimes you buy too much or you don't buy enough to support the running of your applications. With elasticity, your servers, databases, and application resources can automatically scale up or scale down based on load.
+
+4. EC2 Auto Scaling: EC2 Auto Scaling is a service that monitors your EC2 instances and automatically adjusts by adding or removing EC2 instances based on conditions you define in order to maintain application availability and provide peak performance to your users.
+
+
+	- Features
+		- Automatically scale in and out based on needs.
+		- Included automatically with Amazon EC2.
+		- Automate how your Amazon EC2 instances are managed.
+	- Tips
+		- EC2 Auto Scaling is found on the EC2 Dashboard.
+		- EC2 Auto Scaling adds instances only when needed, optimizing cost savings.
+		- EC2 predictive scaling removes the need for manual adjustment of auto scaling parameters over time.
+		
+5. Elastic Load Balancing: Elastic Load Balancing automatically distributes incoming application traffic across multiple servers.
+
+	- Elastic Load Balancer is a service that:
+
+		- Balances load between two or more servers
+		- Stands in front of a web server
+		- Provides redundancy and performance
+	- Tips
+		
+		- Elastic Load Balancing can be found on the EC2 Dashbaoard.
+		- Elastic Load Balancing works with EC2 Instances, containers, IP addresses, and Lambda functions.
+		- You can configure Amazon EC2 instances to only accept traffic from a load balancer.
+		
+6. EC2 Auto Scaling: In this hands-on exercise, you will use Auto Scaling to automatically launch Amazon EC2 instances in response to conditions you specify. You will also see auto scaling in action as it automatically provisions a replacement instance.
+
+
+	- Prerequisites:
+	
+		- AWS Account
+		
+	- Topics Covered-By the end of this lab, you will be able to:
+		
+		- Use auto scaling to launch EC2 instances
+		- Create an auto scaling group
+		- Test auto scaling
+
+	- Steps:
+		1. Create a Launch Configuration
+
+			- On the AWS Management Console page, type EC2 in the Find Services box and then select EC2.
+			- Scroll down to the Auto Scaling section on the left-hand menu and click Auto Scaling Groups.
+			- Click the Create Auto Scaling group button.
+			- Review the steps and click on Get started.
+			- Create a launch configuration by first selecting an Amazon Machine Image (AMI). In the row for Amazon Linux 2 AMI (HVM), SSD Volume Type, click the Select button.
+
+			- Note: An AMI is a template for an instance that indicates the operating system, an application server, and applications.
+
+			- Confirm that t2.micro is selected.
+
+			- Click Next: Configure details.
+			- Enter a name of your choosing in the Name field.
+			- Expand the Advanced Details section.
+			- Next to IP Address Type, click on Assign a public IP address to every instance.
+			- Click Next: Add Storage. Review the screen.
+			- Click Next: Configure Security Group.
+			- Ensure Create a new security group is selected.
+			- Click Review.
+			- Click on Create launch configuration.
+			- On the Select an existing key pair or create a new key pair, select Create a new key pair, enter a key pair name in the Key pair name field, and click Download Key Pair.
+			- Click on Create launch configuration.
+
+		2. Create an Auto Scaling Group
+			
+			- On the Create Auto Scaling Group page, enter a group name of your choosing in the Group name field, ensure the Group size is set to 1, for Network leave the default value. If no default value is shown, click on Create new VPC, and select the first Subnet by clicking in the Subnet field.
+			- Click Next: Configure scaling policies.
+			- Ensure that Keep this group at its initial size is selected.
+			- Click Review.
+			- Review the selected options and click Create Auto Scaling group.
+			- Click Close.
+
+		3. Verify your Auto Scaling Group
+			
+			- Verify that the group has launched your EC2 instance by first ensuring the auto scaling group you just created is selected and examining the Details tab shown on the bottom of the screen.
+			- Click the Activity History tab. The status of your instance should be Successful, which means the instance is launched.
+			- Click on the Instances tab. Notice the Lifecycle column states InService.
+
+		4. Test Auto Scaling
+
+			- Click on the Instances tab.
+			- Under the Instance ID column, click on the blue Instance ID link.
+			- You will be taken to the Amazon EC2 console Instances page.
+			- Your instance should be selected.
+			- Click the Actions button, scroll down to Instance State, and select Terminate. Then select Yes, Terminate.
+			- In the left-hand navigation pane, click Auto Scaling Groups.
+			- Click the Instances tab. You will eventually see a new instance appear. If the new instance doesn’t appear, click refresh occasionally to update the list.
+			- Click on the Activity History tab to review the history for the Instance.
+
+		5. Delete Auto Scaling Resources
+			- At the top of the screen, click the Actions button next to the Create Auto Scaling group.
+			- Click the Delete option.
+
+
+
