@@ -1,0 +1,90 @@
+1. Messaging in the Cloud: There are often times that users of your applications need to be notified when certain events happen. Notifications, such as text messages or emails can be sent through services in the cloud. The use of the cloud offers benefits like lowered costs, increased storage, and flexibility.
+
+2. Simple Notification Service: Amazon Simple Notification Service (or SNS) is a cloud service that allows you to send notifications to the users of your applications. SNS allows you to decouple the notification logic from being embedded in your applications and allows notifications to be published to a large number of subscribers.
+
+	- Features
+		- SNS uses a publish/subscribe model.
+		- SNS can publish messages to Amazon SQS queues, AWS Lambda functions, and HTTP/S webhooks.
+
+	- Tips
+		- SNS is found under the Application Integration section on the AWS Management Console.
+		- SNS Topic names are limited to 256 characters.
+		- A notification can contain only one message.
+		
+3. Queues: A queue is a data structure that holds requests called messages. Messages in a queue are commonly processed in order, first in, first out (or FIFO).
+
+	- Messaging queues improve:
+
+		- performance
+		- scalability
+		- user experience
+		
+4. Simple Queue Service: Amazon Simple Queue Service (SQS) is a fully managed message queuing service that allows you to integrate queuing functionality in your application. SQS offers two types of message queues: standard and FIFO.
+
+	- Features
+		- send messages
+		- store messages
+		- receive messages
+
+	- Tips
+		- The Simple Queue Service (SQS) is found under the Application Integration on the AWS Management Console.
+		- FIFO queues support up to 300 messages per second.
+		- FIFO queues guarantee the ordering of messages.
+		- Standard queues offer best-effort ordering but no guarantees.
+		- Standard queues deliver a message at least once, but occasionally more than one copy of a message is delivered.
+		
+5. SNS: In this hands-on exercise, you will learn how to send alerts via SNS by creating a topic, subscribing to a topic, and publishing an alert message to a topic.
+
+	Prerequisites:
+		
+		-AWS Account
+	
+	- Topics Covered:
+
+		- By the end of this lab, you will be able to:
+
+			- Create a topic
+			- Subscribe to a topic
+			- Publish a message to a topic
+			
+	- Steps:
+		
+		1. Create a Topic
+			- On the AWS Management Console page, type sns in the Find Services box and then select Simple Notification Service. The SNS Dashboard appears.
+			- On the left-hand menu, click on Topics.
+			- Click on Create topic.
+			- Enter a name for your topic in the Name field.
+			- In the Access policy – optional section, for the Define who can publish messages to the topic section, ensure Everyone is selected allowing anyone to publish to the topic. For the Define who can subscribe to this topic section, ensure Everyone is selected.
+			- Click Create Topic. The topic screen will display.
+			
+		2. Subscribe to a Topic
+			- Click Create subscription from the Subscriptions section.
+			- For the Protocol field, select Email.
+			- For the Endpoint, enter the email that should receive the notifications.
+			- Click Create subscription.
+			- The subscription page will display and the status will be Pending confirmation. After your subscription is created, you must confirm it.
+			- In your email client, check the email address that you provided for the Endpoint and choose Confirm subscription in the email from Amazon SNS.
+			- In your web browser, a subscription confirmation screen appears.
+			
+		3. Publish a Message to a Topic
+			- From the menu on the left-hand side, click on Topics.
+			- Select the topic you created earlier and then click Publish message.
+			- Enter a subject in the Subject field.
+			- Enter a value in the Message body to send to the endpoint box in the Message body section.
+			- Scroll down and click Publish message.
+			- In your email client, read the email from Amazon SNS.
+			
+6. Containers in the Cloud: Enterprises are adopting container technology at an explosive rate. A container consists of everything an application needs to run: the application itself and its dependencies (e.g. libraries, utilities, configuration files), all bundled into one package. Each container is an independent component that can run on its own and be moved from environment to environment.
+
+7. Elastic Container Service (ECS)
+ECS is an orchestration service used for automating deployment, scaling, and managing of your containerized applications. ECS works well with Docker containers by:
+
+	- launching and stopping Docker containers
+	- scaling your applications
+	- querying the state of your applications
+
+	- Tips
+		- ECS is under the Compute section on the AWS Management Console.
+		- You can schedule long-running applications, services, and batch processeses using ECS.
+		- Docker is the only container platform supported by Amazon ECS.
+
