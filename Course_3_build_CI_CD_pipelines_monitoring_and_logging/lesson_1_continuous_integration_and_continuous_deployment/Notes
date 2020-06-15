@@ -1,0 +1,117 @@
+1. 
+
+A. Course Prerequisites
+	- We assume that you have completed courses 1 - Cloud Fundamentals and course 2 - Deploy Infrastructure as Code of the Cloud DevOps Nanodegree. It would help if you had the following as prerequisite:
+
+		- Knowledge of the AWS fundamentals
+		- Familiarity with basic commands in a Linux / Unix environment
+		- A Github account
+		
+B. Course Objectives
+
+	In this course, you will learn the fundamentals of Continuous Integration and Continuous Deployment (CI/CD) subject matters, such as Jenkins, Pipelines, Prometheus, and Ansible. After completing the course, you will be able to:
+
+	Explain the fundamentals of CI/CD and Jenkins as a framework to achieve automation in CI/CD. Lesson 1 introduces Jenkins for building, testing, and delivering or deploying software.
+	Make use of various Jenkins Plugins and Deployment Strategies to boost your CI/CD requirements. Lesson 2 will demonstrate to install and configure Blue Ocean, Aqua MicroScanner plugins for CI/CD pipeline. It will discuss several Deployment Strategies, as well.
+	Utilize Ansible as a configuration management tool. Lesson 3 describes the basics of Ansible, such as Templates, Services, Conditionals, and Roles. It will demonstrate to run Ansible to provision the target infrastructure using code (infrastructure as code) .
+	Make use of monitoring and log aggregation tools. Lesson 4 will guide you to install, configure, and use the Prometheus tool and ELK services.
+	
+C. Course Github Repository
+
+	Throughout this course, we will be addressing code for performing builds in Jenkins using scripts written in Groovy, Bash, and Ansible markup language. Please refer to the following Git repository to see these code samples used in video demonstrations. There are three branches of code within this repository; master, blue, and green. https://github.com/udacity/nd9991-c3-Build-CI-CD-Pipelines-Monitoring-and-Logging-v1
+
+D. Project Overview
+	The end of this course will lead to a project where you can show your acquired skills taught in this course. In our project, you will deploy and run an instance on AWS, configure Jenkins, and create a pipeline to deploy a static website on S3.
+
+E. Lesson Objectives
+	After completing this lesson, you will be able to:
+
+		- Explain the fundamentals of CI/CD and pipelines
+		- Setup the prerequisites for Jenkins, such as AWS IAM user, EC2 instance, and S3 services
+		- Install and configure Jenkins as automation server to build a pipeline
+		- Describe the role of Jenkinsfile
+		- Install Blue Ocean plugin into Jenkins
+		
+2. What is CI/CD: CI/CD is a consistent and automated way for a DevOps team to build, package, test, and deploy applications
+
+
+	- Continuous Integration means newly developed code changes of a project are periodically built, tested, and integrated into a shared repository like Git. Then, the integrated code is verified and tested using automated tools.
+
+	- Continuous Delivery is the process of automating the release of the merged and validated code to a repository and finally release a production-ready build to the production environment.
+	
+3. Pipelines Overview
+	
+	- One of the key best practices of DevOps is to be able to do “Infrastructure as Code”. A Pipeline enables us to store our Jenkins project configuration as code in a Git repository. A Pipeline is a set of tools and processes to automate the CI/CD.
+
+	- The previous way of doing this was to store the configurations as text on the Jenkins server. However, it is far superior to store this in a Git repository, because that way we version it, review it, perform pull requests, and integrate it just like the rest of our code.
+
+	- A pipeline contains steps that have different actions performed as part of those steps. Pipelines are written in Groovy code and designed to be reusable. Pipelines can be used similarly to how programming languages use “Modules” in a pluggable manner. The value in a Pipeline is it enables advanced functionality above and beyond simple Bash scripting. There are additional programmatic controls such as try and catch. A try/catch block creates a means of responding to errors in code or data for Jenkins functions. Pipelines assist with performing code testing and verification due to their modular nature and try/catch routines. This enables advanced error handling which lends itself to complex functionality.
+	
+	
+4. AWS setup
+
+	a) Created a new policy with s3, ec2 and cloud watch full access (Minimum_security_model_udacity)
+	
+	b) Created a new group "jenkins" and attached it to the policy.
+	
+	c) Created a new user "jenkins" and put him in this group with both programmatic and console access.
+	
+	d) Login as this user and create an ubuntu ec2 instance.In security group open port 22 and 8080 for my ip. Rest default.
+	
+	e) ssh as the jenkins user. do aws configure for new user. (ssh -i jenkins_key_pair.pem ubuntu@13.233.100.135)
+	
+	f) Set up jenkins and check on 13.233.100.135:8080
+	
+5. What is Jenkins?
+	- To "expedite" the software development process, CI/CD has become an essential practice for rapid building, testing, and deployment. Jenkins is an automation server that is used to automate the tasks associated with CI/CD, such as building, testing, and deploying the application. There are many more other frameworks available in the market, as listed here.
+
+	- Jenkins comes originally from the Hudson project, which had very similar features and functionality but was controlled by Sun Microsystems. Jenkins is an open-source tool that was released in 2011. Jenkins is written in Java language. The prime feature of Jenkins is Jenkins Pipeline.
+
+	- What is Jenkins Pipeline?
+		- In general, a Pipeline is a set of tools and processes to automate the CI/CD of a software application. Jenkins Pipeline is a set of plugins that assist in achieving continuous delivery. Jenkins is highly modular and supports a multitude of plugins. Plugins extend Jenkins with additional features to support various requirements. We will cover a few of the plugins at a higher level in the next lesson.
+
+- Jenkinsfile
+	- Jenkinsfile is a text file that contains the definition of a Jenkins Pipeline. This text file is stored into the application’s Source Control Repository e.g., Github. Storing the Jenkinsfile into a source control repository makes it possible to review and audit collaboratively. A Jenkinsfile can be written using two types of syntax - Declarative and Scripted. In this course, we will use the Declarative way to write Jenkinsfile .
+
+
+
+
+- Recommended Read
+	- Jenkins provides Guided Tours, Tutorials, and Handbook documentation.
+	- Read the handbook documentation for Pipeline. The snapshot below highlights the topics that would provide insight into the Pipeline.
+	We suggest to read the Handbook first, and then go through the last two tutorials - “Create a Pipeline in Blue Ocean” and “End-to-End Multibranch Pipeline Project Creation”, later in this course.
+	
+	
+6. Jenkins Plugins - Jenkins supports a plenitude of plugins. Plugins extend Jenkins with additional features to support various requirements. Here we will install the Blue Ocean Plugin into Jenkins. The general sequence of steps to select and install any plugin into Jenkins are:
+
+
+	Jenkins dashboard --> Manage Jenkins --> Manage Plugins --> Available tab --> Filter out using a keyword
+
+- Blue Ocean Plugin
+	- Blue Ocean essentially provides a re-skinned and simplified GUI for working with Jenkins. Blue Ocean can help you configure your pipeline using a few clicks.
+	
+- Configure Jenkins for Enterprise Authentication with LDAP
+	- In the Jenkins GUI click on “Manage Jenkins”
+	- Click the lock icon “Configure Global Security”
+	- Select the checkbox “Enable Security”
+	- Use the radio button option for LDAP
+	- Enter the Hostname/IP address of the LDAP server
+	- Select “Advanced Server Configuration”
+	- Configure the LDAP authentication to match your environment
+	- Once configured, use the “Test LDAP Setting” and put in your username and password
+	- If successful, it will present a login success message
+	- Click Apply and Save button
+
+- Active Directory Authentication
+	- Select “Manage Jenkins” in home screen
+	- Click “Manage Plugins”
+	- Select the “Available” tab
+	- Enter “Active Directory” in the search box
+	- Select the “Active Directory Plugin” and click “Download now and install after restart”
+	- Restart your Jenkins server when it is idle
+	- Once installed, in “Manage Jenkins” select “Configure Global Security”
+	- Select “Active Directory” and enter the domain and domain accounts
+	- Choose “Matrix based Security” and configure the desired users and groups (note: they are case sensitive)
+	- Login to the web interface with Active Directory credentials to test the functionality
+	
+	

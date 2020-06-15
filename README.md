@@ -19,3 +19,7 @@
 - [Lesson 4: Servers & Security groups](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_2_deploy_infrastructure_as_code/lesson_4_servers_and_security_groups)
 - [Lesson 5: Storage & Databases](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_2_deploy_infrastructure_as_code/lesson_5_storage_and_databases)
 - [Project 2: Project 2 Deploy a high availability web app using cloudformation](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_2_deploy_infrastructure_as_code/project_2_deploy_a_high_availability_web_app_using_cloudformation)
+
+[Course 3: Build CI/CD Pipelines, Monitoring & Logging](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_3_build_CI_CD_pipelines_monitoring_and_logging)
+
+- [Lesson 1: Continuous Integration & Continuous Deployment](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_3_build_CI_CD_pipelines_monitoring_and_logging/lesson_1_continuous_integration_and_continuous_deployment)
