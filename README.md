@@ -16,3 +16,5 @@
 - [Lesson 1: Getting started with CloudFormation](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_2_deploy_infrastructure_as_code/lesson_1_getting_started_with_cloudformation)
 - [Lesson 2: Infrastructure Diagrams](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_2_deploy_infrastructure_as_code/lesson_2_infrastructure_diagrams)
 - [Lesson 3: Networking Infrastructure](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_2_deploy_infrastructure_as_code/lesson_3_networking_infrastructure)
+- [Lesson 4: Servers & Security groups](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_2_deploy_infrastructure_as_code/lesson_4_servers_and_security_groups)
+- [Lesson 5: Storage & Databases](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_2_deploy_infrastructure_as_code/lesson_5_storage_and_databases)

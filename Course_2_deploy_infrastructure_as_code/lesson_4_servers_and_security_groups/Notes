@@ -1,0 +1,268 @@
+1. Lesson Objectives: In the previous lesson, we built the necessary networking infrastructure for a web application. In this lesson, we will learn to build the next set of resources on top of the networking infrastructure. Upon completion of this lesson, you will be able to...
+
+	- Specify firewall rules using security groups
+	- Create autoscaling groups for the elasticity of servers
+	- Code the launch configuration for the web application
+	- Add the target groups and listeners
+	- Update the stack with the load balancer
+	- Learn to debug the security group
+	
+2. Here in the servers.yml file. we just have one parameter, which is the same env name from the previous lesson. This way we will be able to reference to any output variables given by our network creation script.
+
+3. Security Groups: The following is the syntax required to create a SecurityGroup:
+
+
+	Type: AWS::EC2::SecurityGroup
+	Properties: 
+	  GroupDescription: String
+	  GroupName: String
+	  SecurityGroupEgress: 
+		- Egress
+	  SecurityGroupIngress: 
+		- Ingress
+	  Tags: 
+		- Tag
+	  VpcId: String
+	Although they are not required, the SecurityGroupEgress and SecurityGroupIngress property rules are the most critical to the SecurityGroup as it defines where the traffic will go. While SecurityGroupEgress defines outbound traffic, SecurityGroupIngress defines the inbound traffic.
+
+
+
+	- Ingress rules and egress rules
+		- Ingress rules are for inbound traffic, and egress rules are for outbound traffic.
+		- Ingress rules restrict or allow traffic trying to reach our resources on specific ports.
+		- Egress rules restrict or allow traffic originating from our server -- typically we are ok allowing all outbound traffic without restrictions as this doesn’t pose a risk for a security breach.
+		
+4. Security Groups: Security groups are specific to individual resources (EC2 servers, databases) and not to subnets.
+
+
+	- Traffic is blocked by default
+	- In cloud, traffic is completely blocked, so you have to explicitly open ports to allow traffic in and out. This is a general networking concept.
+	- Limit inbound traffic for security
+	- For ingress rules, we want to limit inbound traffic, for security, to a single port or just a handful of ports required by the application we are running.
+	- If it’s a public web server, for example, it will require port 80 open to the world ( World = 0.0.0.0/0 )
+	- Should you need the SSH port open, restrict this port only to your specific IP address.
+	- For outbound traffic, give full access
+	- For egress rules, we want to give the resource full access to the internet, so we give egress access to all ports, from 0 all the way to 65535.
+
+5. Accessing server in a private subnet via jumpbox
+
+	a. Create two key-pairs, 1 for jumpbox and 1 for private servers.
+
+	b. Create an ec2 instance so that you can ssh into it with the jumpbox key (public subnet of the VPC)
+
+		- ssh -i jumpbox-key.pem ec2-user@13.233.186.62 (if amazon linux, user is ec2-user)
+	
+	c. Create another ec2 instance in the same VPC but this time in the private subnet
+	
+	c. from outside copy the private server key into the jumpbox
+
+		- scp -i jumpbox-key.pem private-server-devops-key.pem ec2-user@13.233.186.62:/home/ec2-user/private-server-devops-key.pem
+
+	d. Login: ssh -i jumpbox-key.pem ec2-user@13.233.186.62
+
+	e. Then try to login to private ec2 with private ip with the private-server key:
+
+		- ssh -i private-server-devops-key.pem ec2-user@10.0.2.200
+	
+	f. This will give a bad permission error. Fix it with : chmod 400 private-server-devops-key.pem and try again. Now you will succeed.
+
+6. A. What is an AWS UserData script: A UserData script is a series of commands that you use to properly configure your server to run your application.
+
+
+- This is where you do things such as:
+
+	- Fetch credentials
+	- Set Environment Variables ( ENV=PROD, for example )
+	- Download and Install libraries
+	- Get your source files or binaries from a storage location, such as S3
+
+- When should you use it?
+	- If you want to run your application in a plain out-of-the-box Linux or Window server, you'll use the UserData script to do all the necessary configurations. You don't need it if you are using a Virtual Machine Image ( AMI ) that already has everything installed.
+
+B. Verification and troubleshooting
+	The best way to create and verify a UserData script is to run each command manually and verify everything works as expected. If you run yours and it fails, you should login to the server and check the logs that can be found here: /var/log/cloud-init-output.log. For Windows: C:\ProgramData\Amazon\EC2-Windows\Launch\Log\UserdataExecution.log
+
+	Difference between UserData on Windows and Linux
+	On Windows, you have the option of PowerShell:
+
+	<powershell>
+	$file = $env:SystemRoot + "\Temp\" + (Get-Date).ToString("MM-dd-yy-hh-mm")
+	New-Item $file -ItemType file
+	</powershell>
+	Or more traditional Batch scripts:
+
+	<script>
+	echo Current date and time >> %SystemRoot%\Temp\test.log
+	echo %DATE% %TIME% >> %SystemRoot%\Temp\test.log
+	</script>
+	For Linux, follow the included example.
+
+C. Auto Scaling Concepts
+	1. Scaling Policy
+	A Scaling Policy is the criteria used to decide when to Add or Remove Servers from your Auto Scaling Group. Running the servers 24 hours a day costs money. So, It's best to have criteria to choose to turn those servers off when they are not needed and then turn them back on when there is demand.
+
+	This is achieved using a Scaling Policy. For example, you could create a CloudWatch Alarm with a custom metric that counts the number of web visitors in the last 2 hours, if the number is less than 100, for example, perhaps a single server is enough. This will be a trigger to Scale Down if there is more than one server running at the time.
+
+	2. Launch Configuration
+	Think of a Launch Configuration as a template or a recipe. You are instructing the Auto Scaling service HOW to run your web application. For example: My application requires 2GB RAM , 4 vCPUs, 10GB of Disk Space, The Java runtime version 8 Or NodeJS 10.0, for example. All this on top of a standard distribution of Linux or Windows Read more about Launch Configuration.
+
+	Once an Auto Scaling group knows how to launch new copies of your application, then the process of scaling up and down can take place.
+
+	3. Load Balancer
+	While a load balancer is not exactly a part of Auto Scaling but it helps answer the question: "If I am running a web application in 20 different servers, how do I setup a single point of entry that guarantees an even workload distribution across all 20 servers?" The answer is: with a Load Balancer.
+
+	A load balancer allows you to reduce your Auto Scaling down to 1 server at night, when very few people are using your Web Application and then Scale up to 10 or more servers during the day, when hundreds or thousands may be using it. The user doesn't experience any difference in availing the services due to auto-scaling.
+
+
+7. The following is the syntax used for AutoScaling LaunchConfiguration:
+
+	Type: AWS::AutoScaling::LaunchConfiguration
+	Properties: 
+	  AssociatePublicIpAddress: Boolean
+	  BlockDeviceMappings: 
+		- BlockDeviceMapping
+	  ClassicLinkVPCId: String
+	  ClassicLinkVPCSecurityGroups: 
+		- String
+	  EbsOptimized: Boolean
+	  IamInstanceProfile: String
+	  ImageId: String
+	  InstanceId: String
+	  InstanceMonitoring: Boolean
+	  InstanceType: String
+	  KernelId: String
+	  KeyName: String
+	  LaunchConfigurationName: String
+	  PlacementTenancy: String
+	  RamDiskId: String
+	  SecurityGroups: 
+		- String
+	  SpotPrice: String
+	  UserData: String
+	The ImageId and Instance Type are the only required properties for a LaunchConfiguration. However, there are many useful properties you will likely want to include.
+
+	This is an updated WebAppLaunchConfig so that you don’t need external dependencies. Please note this UserData Script is meant to run on Ubuntu Linux.
+
+	WebAppLaunchConfig:
+		Type: AWS::AutoScaling::LaunchConfiguration
+		Properties:
+		  UserData:
+		    Fn::Base64: !Sub |
+		     #!/bin/bash
+		    apt-get update -y
+		    apt-get install apache2 -y
+		    systemctl start apache2.service
+		    cd /var/www/html
+		    echo "Udacity Demo Web Server Up and Running!" > index.html
+
+		  ImageId: ami-005bdb005fb00e791
+		  IamInstanceProfile: !Ref ProfileWithRolesForOurApp
+		  SecurityGroups:
+		  - Ref: WebServerSecGroup
+		  InstanceType: t3.small
+		  BlockDeviceMappings:
+		  - DeviceName: "/dev/sdk"
+		    Ebs:
+		      VolumeSize: '10'
+	In the above example we have done the following:
+
+	- Specified 10gbs for our VolumeSize.
+	- Referenced the previously defined WebServerSecGroup for our SecurityGroup
+	- Set our InstanceType to t3.medium for our EC2 Instance
+	
+8. Relationship between Target Groups and Auto Scaling groups: A Load Balancer is a device that simply forwards traffic, evenly across a group of servers, known as a Target Group. The problem is, we can’t specifically name those servers, because if they are part of an Auto Scaling group, this means that they can come and go as demand for your application increases or decreases. The way around this is, using the TargetGroupARNs property of the Auto Scaling group, we can automatically associate any new servers and remove discarded servers from the Target group automatically by simply including the Resource Name (ARN) of our Load Balancer’s target group in this property of our Auto Scaling Group. This way, the Load Balancer will always know where to send the traffic.
+
+The following is the required syntax for Load Balancer and Listener
+
+ WebAppLB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Subnets:
+      - Fn::ImportValue: !Sub "${EnvironmentName}-PUB1-SN"
+      - Fn::ImportValue: !Sub "${EnvironmentName}-PUB2-SN"
+      SecurityGroups:
+      - Ref: LBSecGroup
+  Listener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn:
+          Ref: WebAppTargetGroup
+      LoadBalancerArn:
+        Ref: WebAppLB
+      Port: '80'
+      Protocol: HTTP
+  ALBListenerRule:
+      Type: AWS::ElasticLoadBalancingV2::ListenerRule
+      Properties:
+        Actions:
+        - Type: forward
+          TargetGroupArn: !Ref 'WebAppTargetGroup'
+        Conditions:
+        - Field: path-pattern
+          Values: [/]
+        ListenerArn: !Ref 'Listener'
+        Priority: 1
+The following is the required syntax for TargetGroup:
+
+Type: AWS::ElasticLoadBalancingV2::TargetGroup
+Properties: 
+  HealthCheckEnabled: Boolean
+  HealthCheckIntervalSeconds: Integer
+  HealthCheckPath: String
+  HealthCheckPort: String
+  HealthCheckProtocol: String
+  HealthCheckTimeoutSeconds: Integer
+  HealthyThresholdCount: Integer
+  Matcher: 
+    Matcher
+  Name: String
+  Port: Integer
+  Protocol: String
+  Tags: 
+    - Tag
+  TargetGroupAttributes: 
+    - TargetGroupAttribute
+  TargetType: String
+  Targets: 
+    - TargetDescription
+  UnhealthyThresholdCount: Integer
+  VpcId: String
+
+
+Health Checks are the requests your Application Load Balancersends to its registered targets. These periodic requests test the status of these targets. You can see us defining our Health Check properties in the example below:
+
+ WebAppTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 35
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 30
+      HealthyThresholdCount: 2
+      Port: 80
+      Protocol: HTTP
+      UnhealthyThresholdCount: 5
+      VpcId: 
+        Fn::ImportValue:
+          Fn::Sub: "${EnvironmentName}-VPCID"
+In the above example we specify the following:
+
+	- The port where our targets receive traffic - Port: 80
+	- The protocol the load balancer uses when performing health checks on targets - HealthCheckProtocol: HTTP
+	- The time it takes to determine a non-responsive target is unhealthy - HealthCheckIntervalSeconds: 35
+	- The number of healthy/unhealthy checks required to change the health status - HealthyThresholdCount: 2 UnhealthyThresholdCount: 5
+	
+9. V.V.IMP: This was not working. So we went in manually and changed outbound rule for demoserverstack-LBSecGroup-XWJZHOWMJ2Y7
+
+We created two outbound rules : 
+
+Custom TCP	TCP	8080	0.0.0.0/0	-
+Custom TCP	TCP	8080	::/0	-
+
+But never do it like this. Always do it via script.
+
+Now if we go to the dns name of the loadbalancer in a browser: http://demos-webap-1j9e5bpy9gqku-1922334223.ap-south-1.elb.amazonaws.com/
+
+We will see tomcat page.
