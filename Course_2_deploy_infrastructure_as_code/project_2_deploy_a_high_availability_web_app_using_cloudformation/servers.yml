@@ -1,0 +1,214 @@
+Description: >
+  Sagarnil Das / Deploying a high availability web app - 
+  This template deploys the Loadbalancers, autoscaling groups, security groups, listeners, policies and ec2 instances needed by the Udagram application
+Parameters:
+  EnvironmentName:
+    Description: An Environment name that will be prefixed to resources
+    Type: String
+  S3CodeBucketName:
+    Description: >- 
+      The name of the S3 bucket containing the zipped application code 
+      to be deployed
+    Type: String
+    AllowedPattern: ^[0-9a-zA-Z][0-9a-zA-Z-]*$
+  S3CodeArchive:
+    Description: The application code archive (must end with .zip)
+    Type: String
+    AllowedPattern: ^.*\.zip$
+  DistributionId:
+    Type: String
+
+Resources:
+  LoadBalancerSecGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to our load balancer
+      VpcId: 
+        Fn::ImportValue:
+          !Sub "${EnvironmentName}-VPC-ID"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName} Load Balancer Security Group
+  
+  WebServerSecGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to our hosts and allow SSH from local only
+      VpcId: 
+        Fn::ImportValue:
+          !Sub "${EnvironmentName}-VPC-ID"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName} Web Servers Security Group
+
+  WebAppLaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo apt-get update -y
+          sudo apt-get install unzip awscli -y
+          sudo apt-get install apache2 -y
+          sudo systemctl start apache2.service
+          sudo rm /var/www/html/index.html
+          sudo aws s3 cp s3://${S3CodeBucketName}/${S3CodeArchive} /var/www/html
+          sudo unzip /var/www/html/udacity.zip -d /var/www/html
+          sudo systemctl restart apache2.service
+      SecurityGroups:
+        - Ref: WebServerSecGroup
+      InstanceType: t3.medium
+      ImageId: ami-0b44050b2d893d5f7
+      IamInstanceProfile: !Ref RootInstanceProfile
+      BlockDeviceMappings:
+        - DeviceName: "/dev/sdk"
+          Ebs:
+            VolumeSize: 10
+  
+  WebAppGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier:
+        - Fn::ImportValue: !Sub "${EnvironmentName}-PRIV-NETS"
+        # - Fn::ImportValue: !Sub "${EnvironmentName}-PUB-NETS"
+      LaunchConfigurationName: !Ref WebAppLaunchConfig
+      MinSize: '2'
+      MaxSize: '2'
+      TargetGroupARNs: [ !Ref WebAppTargetGroup ]
+
+
+  WebAppLB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Subnets:
+        - Fn::ImportValue: !Sub "${EnvironmentName}-PUB1-SN"
+        - Fn::ImportValue: !Sub "${EnvironmentName}-PUB2-SN"
+      SecurityGroups: [ !Ref LoadBalancerSecGroup ]
+  
+  LBListener: 
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref WebAppTargetGroup
+      LoadBalancerArn: !Ref WebAppLB
+      Port: 80
+      Protocol: HTTP
+  
+  ALBListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions: 
+        - Type: forward
+          TargetGroupArn: !Ref WebAppTargetGroup
+      Conditions:
+        - Field: path-pattern
+          Values: [/]
+      ListenerArn: !Ref LBListener
+      Priority: 1
+  
+  WebAppTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 8
+      HealthyThresholdCount: 2
+      Port: 80
+      Protocol: HTTP
+      UnhealthyThresholdCount: 3
+      VpcId: 
+        Fn::ImportValue:
+          !Sub "${EnvironmentName}-VPC-ID"
+
+  S3CodeBucketCopyRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Path: /
+
+  RootInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+        - !Ref S3CodeBucketCopyRole
+
+  S3CodeBucketCopyPolicy:
+    Type: AWS::IAM::Policy
+    Properties: 
+      PolicyName: S3CodeBucketCopyPolicy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement: 
+          - Effect: Allow
+            Action:
+              - s3:GetObject
+            Resource: "*"
+      Roles: 
+        - !Ref S3CodeBucketCopyRole
+  
+  EscalationTopic:
+    Type: AWS::SNS::Topic
+
+  EscalationTopicEmailSubscriber:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Endpoint: sagarnildass@gmail.com
+      Protocol: email
+      TopicArn: !Ref EscalationTopic
+      
+  CloudFrontTotalErrorRateAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      Namespace: AWS/CloudFront
+      MetricName: TotalErrorRate
+      Dimensions:
+        - Name: DistributionId
+          Value: !Ref DistributionId
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 1
+      AlarmActions:
+        - !Ref EscalationTopic
+
+Outputs:
+  WALB:
+    Description: The URL of the web application load balancer
+    Value: !Join [ "", [ "http://", !GetAtt WebAppLB.DNSName ] ]
+
+
+
+
+
+
+

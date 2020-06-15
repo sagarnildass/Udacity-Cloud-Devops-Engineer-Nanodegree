@@ -1,0 +1,18 @@
+[
+    {
+        "ParameterKey": "EnvironmentName",
+        "ParameterValue": "UdacityProjectSagarnil"
+    },
+    {
+        "ParameterKey": "S3CodeBucketName",
+        "ParameterValue": "udacity-demo-1"
+    } ,
+    {
+        "ParameterKey": "S3CodeArchive",
+        "ParameterValue": "udacity.zip"
+    } ,
+    {
+    	"ParameterKey":"DistributionId",
+    	"ParameterValue": "EI8CFI2XOB48T"
+    }
+]
