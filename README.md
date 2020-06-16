@@ -23,3 +23,4 @@
 [Course 3: Build CI/CD Pipelines, Monitoring & Logging](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_3_build_CI_CD_pipelines_monitoring_and_logging)
 
 - [Lesson 1: Continuous Integration & Continuous Deployment](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_3_build_CI_CD_pipelines_monitoring_and_logging/lesson_1_continuous_integration_and_continuous_deployment)
+- [Lesson 2: Jenkins Pipelines & Deployment Strategies](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_3_build_CI_CD_pipelines_monitoring_and_logging/lesson_2_jenkins_pipeline_and_deployment_strategies)

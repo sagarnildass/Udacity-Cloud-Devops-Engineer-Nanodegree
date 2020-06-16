@@ -1,0 +1,178 @@
+1. In the previous lesson, we learned about the fundamentals of CI/CD and set up the Jenkins environment to automate the building, testing, and delivering an application. Also, we read earlier that plugins extend Jenkins with additional features to support various requirements. In the current lesson, we will learn to use a few more plugins into Jenkins and discuss deployment strategies.
+
+- Lesson Objectives
+	- After completing this lesson, you will be able to:
+
+		- Install and utilize AWS Plugin into Jenkins
+		- Demonstrate the usage of Blue Ocean Plugin
+		- Setup a Jenkins Pipeline and add a repository to the Pipeline
+		- Explain the concept of multiple pipelines for different environments
+		- Explain Pipeline triggers
+		- Discuss different types of Pipeline testing
+		- Install Aqua MicroScanner Plugin into Jenkins for testing Pipeline security
+		- Introduce the Ansible as a tool for provisioning the target infrastructure using code (infrastructure as code)
+		- Discuss deployment strategies and best practices - specifically Blue-Green deployment.
+		
+2. Install Pipeline: AWS Steps plugin.
+
+3. Steps to Create a Pipeline in Blue Ocean: As we have installed AWS and Blue Ocean plugins into Jenkins on our Ubuntu EC2 instance, next, we will follow the steps below to create a Pipeline in Blue Ocean.
+
+
+	- Fork/Clone the course's Github repository. We will add one Github repository per project. A single Github repository can be re-used in multiple Pipelines.
+	- Create your Pipeline project in Blue Ocean.
+	- Create your initial Pipeline
+	- Use Jenkins to add multiple stages (environments) using Jenkinsfile. Generally, a Pipeline should have three stages (environments) defined in a Jenkinsfile: Development (build), Staging (test), and Deployment. See a declarative Pipeline example here.
+	- Create multiple pipelines, each for Development (build), Staging (test), and Deployment, by creating branches in your Git repository.
+	
+
+4. Exercise:
+
+	a) Created new repo: sagarnil-udacity-devops-course3-ci-cd-pipeline
+
+	b) fork or Clone the repo in a different place: git clone https://github.com/udacity/nd9991-c3-Build-CI-CD-Pipelines-Monitoring-and-Logging-v1. This command will create a clone, locally in your machine.
+
+	c) cd nd9991-c3-Build-CI-CD-Pipelines-Monitoring-and-Logging-v1
+
+	d) git remote -v , git remote remove origin , git remote add origin https://github.com/sagarnildass/sagarnil-udacity-devops-course3-ci-cd-pipeline.git
+
+	e) edited the jenkins file to ap-south-1
+
+	f) installed tidy in ubuntu machine
+
+	g) corrected html file to <strong> from <script>
+
+	h) installed aqua microscanner plugin and went to the website to get the key. Set it in jenkins setting.
+
+	i) installed docker inside the server and gave permission to jenkins as well as ubuntu.
+
+	j) added env variable in jenkins for access key and secret access key
+
+	k) also add jenkins to sudoers group : usermod -a -G sudo jenkins
+
+	l) chmod 777 /var/run/docker.sock
+
+5. Multiple pipelines
+
+instructions: https://www.jenkins.io/doc/tutorials/build-a-multibranch-pipeline-project/#fork-sample-repository (do everything as jenkins user in your commandline)
+
+6. Trigger
+
+	a) We are going to exit blue ocean and in jenkins click on the pipeline and click configure.
+
+	b) Go to scan repository triggers.
+
+	c) Click on the checkbox: Periodically if not otherwise run
+
+	d) selected 1 min as interval
+
+	e) Save. Now whenever we push a change, the pipeline will be triggered.
+
+7. 
+
+	a) git clone https://github.com/sagarnildass/nd9991-c3-Build-CI-CD-Pipelines-Monitoring-and-Logging-v1/tree/master
+
+	b) correct the html file.
+
+	c) git checkout -b fix_html_tag
+
+	d) git add .
+
+	e) git commit -m "changed index.html file"
+
+	f) now we can push this branch and let someone review the pull request once it comes up. But because we are the only one, we will merge our pull request.
+
+	g) git push origin fix_html_tag
+
+	h) Now go to github and merge.
+
+	i) see if jenkins have updated it.
+	
+8. Security Testing with Aqua: Aqua is a Jenkins plugin designed for testing Docker containers. It is one of many security vulnerability scanners available, testing against CVE (Common Vulnerabilities and Exposures).
+
+
+	We’ll install and show how to use Aqua next.
+
+	a. We already configured aqua. 
+
+	b. Go to global tool config and in docker: name - version of docker and installation root: /usr/bin
+
+
+9. Pipeline Testing - Key ideas
+	a) Linting - It is the process of running a program that checks the Pipeline code for potential syntax errors.
+
+	b) Security Testing - It is performed with a variety of software to test for Common Vulnerabilities and Exposures (CVE). There are a variety of security testing plugins available for Jenkins. In the next concept, we will demonstrate to use Aqua MicroScanner, which enables scanning of Docker builds for OS package vulnerabilities.
+
+	c) Performance Testing - It is done by setting up a smaller scale environment as compared to production, with Jenkins and running simulated host calls into that environment to determine how the new environment performs under a particular workload. It is a two-stage process -
+
+		- Stage 1 - Run Apache JMeter - JMeter is a testing tool used for estimating the performance of the newly created Jenkins environment. Here is a Tutorial to run JMeter with Jenkins
+		- Stage 2 - Capture Reports - Jenkins provides Performance plugin to capture reports from popular testing tools, such as JMeter, Selenium, and many others in the XML and CSV format. We recommend you to follow along with the documentation available at the link mentioned-above about running tests and building reports with Performance plugin.
+
+	d) Integration Testing - It is testing the Pipeline code from different modules to make sure it all works together. It occurs after unit testing. Jenkins provides JUnit plugin as unit-testing framework to write repeatable tests. Refer here for reading the functionality of JUnit plugin using steps.
+
+
+9. Deployment strategies: Deployment strategy is an approach to roll out the updates/changes made in the "live" application. The idea is that the application must not be brought down to introduce the updates. There are a variety of strategies available. Let's assume that there are two versions of the software applications - version A and B. Version B is the updated version.
+
+	- Rolling - Version B is gradually rolled out succeeding version A. This is suitable when the updates are very small, such as bug fixes.
+	- Blue/Green - Version B is released alongside version A, then the traffic is switched to version B. This is the preferred model when there are major updates or releasing new features.
+	- Canary - Version B is released to a specific subset of users for early feedback and testing, then proceed to a complete rollout.
+	- A/B testing - Version B is released to a subset of users under particular conditions.
+	- Recreate - Version A is terminated first, and then the version B is rolled out.
+	- Shadow - Version B receives real-world traffic alongside version A and doesn’t impact the response.
+	- We will follow Blue-Green deployment strategy in this concept.
+
+- Blue Green Deployment Explained
+	- Blue green deployment enables deploying new code to environments while keeping the existing environment up until the new environment is ready. This is important for providing a consistently working environment to the end users of the code/website. In addition, it allows us to independently test the new environment before putting it in front of the end user. To accomplish blue green deployment it requires setting up this identical environment, switching the load balancer, and verifying that the code base has changed through the website.
+	
+- In order to follow Blue-Green deployment strategy, we need to have the following tools/plugins available in our Jenkins host - Ansible, Boto - a Python interface to AWS, and CloudBees AWS plugin. Ansible is a tool for automated provisioning, configuration management, and application deployment in target infrastructure using code. In the overarching diagram, we saw the role of Ansible in the deployment. Let's install the tools/plugins mentioned above, to get started with Blue-Green deployment. We will learn more about Ansible in the next lesson.
+
+10. Blue/Green Deployment Strategy
+	- apt install ansible
+	- pip install boto
+	- Jenkins plugin CloudBees AWS Credentials Plugin
+	- Configure AWS Credentials in Jenkins
+	- Map credentials from Jenkins to Pipeline application
+
+- Blue/Green Deployment IAM Policy
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "s3:*",
+                "cloudwatch:*",
+                "route53:*",
+                "ec2:*",
+                "ec2:DescribeAccountAttributes",
+                "elasticloadbalancing:*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": "iam:CreateServiceLinkedRole",
+            "Resource": "arn:aws:iam::*:role/aws-service-role/*"
+        }
+    ]
+}
+
+- Blue/Green Deployment Strategy (cont.)
+	- Set up Private Route53 Zone
+	- Configure Healthcheck
+	- Run Blue Deployment
+	- Run Green Deployment
+	- Check Route53 entries
+	
+11. Deployment big picture:
+
+- Deployment Strategies Guide
+	- Manual changes will get you in trouble sooner or later.
+	- New feature code releases often require blue/green deployment due to scheme changes and/or to keep consistency.
+	- To perform a bug fix of an existing product, a rolling deployment will be your most frequent choice.
+	
+12. 
+
+
+

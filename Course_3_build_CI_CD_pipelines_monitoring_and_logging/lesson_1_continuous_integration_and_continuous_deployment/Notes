@@ -58,9 +58,9 @@ E. Lesson Objectives
 	
 	d) Login as this user and create an ubuntu ec2 instance.In security group open port 22 and 8080 for my ip. Rest default.
 	
-	e) ssh as the jenkins user. do aws configure for new user. (ssh -i jenkins_key_pair.pem ubuntu@13.233.100.135)
+	e) ssh as the jenkins user. do aws configure for new user. (ssh -i jenkins_key_pair.pem ubuntu@52.66.240.198)
 	
-	f) Set up jenkins and check on 13.233.100.135:8080
+	f) Set up jenkins and check on 52.66.240.198:8080
 	
 5. What is Jenkins?
 	- To "expedite" the software development process, CI/CD has become an essential practice for rapid building, testing, and deployment. Jenkins is an automation server that is used to automate the tasks associated with CI/CD, such as building, testing, and deploying the application. There are many more other frameworks available in the market, as listed here.
@@ -88,7 +88,7 @@ E. Lesson Objectives
 	Jenkins dashboard --> Manage Jenkins --> Manage Plugins --> Available tab --> Filter out using a keyword
 
 - Blue Ocean Plugin
-	- Blue Ocean essentially provides a re-skinned and simplified GUI for working with Jenkins. Blue Ocean can help you configure your pipeline using a few clicks.
+	- Blue Ocean essentially provides a re-skinned and simplified GUI for working with Jenkins. Blue Ocean can help you configure your pipeline using a few clicks. We installed blue ocean and all related plugins
 	
 - Configure Jenkins for Enterprise Authentication with LDAP
 	- In the Jenkins GUI click on “Manage Jenkins”
