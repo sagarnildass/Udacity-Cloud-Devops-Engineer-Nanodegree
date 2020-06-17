@@ -24,3 +24,4 @@
 
 - [Lesson 1: Continuous Integration & Continuous Deployment](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_3_build_CI_CD_pipelines_monitoring_and_logging/lesson_1_continuous_integration_and_continuous_deployment)
 - [Lesson 2: Jenkins Pipelines & Deployment Strategies](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_3_build_CI_CD_pipelines_monitoring_and_logging/lesson_2_jenkins_pipeline_and_deployment_strategies)
+- [Lesson 3: Ansible & Configuration Management](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_3_build_CI_CD_pipelines_monitoring_and_logging/lesson_3_ansible_and_configuration_management)

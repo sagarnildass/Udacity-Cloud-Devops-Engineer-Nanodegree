@@ -1,0 +1,99 @@
+1. Here’s what you’re going to learn in this Ansible lesson:
+	- Ansible overview
+	- Configuration management philosophy
+	- How to install/update software with Ansible
+	- What are templates and how to use them
+	- Managing services with Systemd
+	- Controlling when actions are taken conditionally
+	- Classification of machines for conditionals
+	- How to create and manage roles
+	- What is an inventory file
+	- Ansible file structure
+	
+2. Ansible - Introduction
+	Ansible is an IT automation tool that can automate the system configuration, software deployment, and infrastructure orchestration for continuous deployments or zero downtime rolling updates. It is an open-source community project sponsored by Red Hat -
+
+	Ansible uses YAML to write Ansible Playbooks. Playbook files describe the automation tasks. The following are the benefits of using this automation tool:
+
+	Well-Suited Architecture - Ansible connects to the nodes (processing entities) and launches tiny programs, called Ansible modules. Modules are removed when they finish executing.
+
+	Secure - Ansible uses SSH keys with ssh-agent. It supports Kerberos and other identity management systems.
+
+	Simple, Scalable, and Manageable - Ansible uses INI file that contains the grouped information of all the nodes and machines that it is managing. This file makes it easy to deal with large scale infrastructure. A plain text inventory file looks like the following: ` [webservers] www1.example.com www2.example.com
+
+	[dbservers] db0.example.com db1.example.com`
+	
+	- Ansible Overview
+		- Ansible is a configuration management language
+		- Leverages YAML (yet another modeling language) and JSON (Javascript object notation)
+		- Agent-less language which uses SSH (secure shell) to connect to servers
+		- Light-weight, but managing large clusters is slow
+		- Written in Python, Ruby and Powershell
+		- Configuration Management Desired State
+		- Idempotency: “The property of certain operations in mathematics and computer science whereby they can be applied multiple times without changing the result beyond the initial application.” Source: https://en.wikipedia.org/wiki/Idempotence
+
+	- Recommended Read
+		- Before proceeding further, you can bookmark Ansible Documentation for quick reference.
+		
+		
+3. Ansible Templates
+	- Ansible templates enable you to apply configuration files which are customized to fit the application
+	- Variables are abstracted using the format: {{ VARIABLE_NAME }}
+
+4. Templates Example Code: File: repo.conf.j2
+
+server {
+        listen   80;
+        server_name  {{ SERVER_NAME }};
+        root   {{ REPO_PATH }};
+        location / {
+                index  index.php index.html index.htm;
+                autoindex on;    #enable listing of directory index
+        }
+}
+
+5. Apply Template
+
+- name: generate all configmap configs
+  template:
+      src: repo.conf.j2
+      dest: /etc/nginx/conf.d/repo.conf
+      owner: root
+      group: root
+      mode: 0744
+      
+6. Conditionals Register
+	Set an Ansible variable to the output of the module
+
+	- name: How long has the server been up
+	  shell: uptime
+	  register: sys_uptime
+	  
+7. Built-in Ansible Variables
+	- To see every built-in variable for the system you are using (every host is different) (change localhost to the host you are checking): $ ansible -m setup localhost
+	- Some common ones:
+		- ansible_hostname
+		- ansible_all_ipv4_addresses
+		- ansible_architecture
+		- ansible_kernel
+		
+8. File Structure of a Role: Each role is contained in a subdirectory: roles/name_of_role
+
+
+Containing additional directories:
+
+Tasks
+Templates
+Vars
+Files
+To include a role:
+
+    - name: Initialize Vault Server
+      include_role:
+        name: vault
+        
+9. What are Playbooks: Playbooks are the YAML files that describe the policy for configuration, deployment, and orchestration tasks. These playbooks are utilized by the "Ansible Modules" to manage configurations and deployments to remote machines (nodes). Playbooks can deploy multi-tier rolling updates and can assign actions for other nodes.
+
+10. Running Ansible Playbook with Inventory: ansible-playbook -i my_hosts -a SE_LINUX=”true” init_servers.yaml
+
+11. 
