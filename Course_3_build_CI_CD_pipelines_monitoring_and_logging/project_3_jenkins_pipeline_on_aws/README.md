@@ -252,6 +252,8 @@ Credentials need to be created so that they can be used in our pipeline.
 
 ![Deployment multibranch](screenshots/screenshot-11-multibranch-deployment.png)
 
+### C) Adding curl scripts to check existence of s3 buckets
+
 6. We also added a shell script condition in our jenkinsfile for curl request to the s3 buckets. Based on which branch is pushed, it's respective s3 bucket will receive a curl request and if the http code is 200 (i.e. ok), only then the html file will be pushed to the respective buckets.
 
 
