@@ -1,0 +1,127 @@
+1. Here’s what you’ll learn in this lesson on monitoring:
+	- Monitoring software
+	- Push vs pull monitoring
+	- Prometheus quick setup
+	- Adding a server to Prometheus
+	- Adding an attribute to Prometheus
+	- Prometheus dashboards
+	- Log monitoring with ELK stack
+	- Alerts
+	
+2. Monitoring using prometheus
+
+	a) install ansible and python-pip
+	
+	b) pip install tox
+	
+	c) git clone https://github.com/cloudalchemy/ansible-prometheus
+	
+	d) cd ansible-prometheus
+	
+	d2) mkdir -p roles/cloudalchemy.prometheus/
+	
+	e) mv defaults/ handlers/ molecule/ tasks/ templates/ vars/ meta/ roles/cloudalchemy.prometheus/
+	
+	f) vi README.md
+	
+	g) copy the example playbook code
+	
+	h) vi main.yaml and paste the example playbook code (get rid of this line:- demo.cloudalchemy.org:9100)
+	
+	---
+	- hosts: all
+	  roles:
+	  - cloudalchemy.prometheus
+	  vars:
+		prometheus_targets:
+		  node:
+		  - targets:
+		    - localhost:9100
+		    labels:
+		      env: demosite
+
+	i) note: install latest ansible.
+	
+	j) pip install jmespath
+	
+	j2) vi inventory
+	
+	localhost ansible_connection=local
+	
+	k) ansible playbook -i inventory main.yaml
+	
+3. Install and Configure Node Exporter: Next we want to install a node exporter as a new user, and configure it to send data into Promotheus.
+
+4. Inside ansible-prometheus directory:
+
+	a) wget https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz
+	
+	b) tar xvfz node_exporter-0.18.1.linux-amd64.tar.gz 
+	
+	c) cd node_exporter-0.18.1.linux-amd64/
+	
+	d) sudo mv node_exporter /usr/local/bin
+	
+	e) sudo vi /etc/systemd/system/node_exporter.service and copy these lines:
+	
+	[Unit]
+	Description=Node Exporter
+	After=network.target
+
+	[Service]
+	User=node_exporter
+	Group=node_exporter
+	Type=simple
+	ExecStart=/usr/local/bin/node_exporter
+
+	[Install]
+	WantedBy=multi-user.target
+	
+	f) sudo useradd -rs /bin/false node_exporter
+	g) sudo systemctl daemon-reload
+	h) sudo systemctl start node_exporter
+	i) sudo systemctl status node_exporter
+	
+	j) sudo vi /etc/prometheus/prometheus.yml
+	
+	#
+	# Ansible managed
+	#
+	# http://prometheus.io/docs/operating/configuration/
+
+	global:
+	  evaluation_interval: 15s
+	  scrape_interval: 15s
+	  scrape_timeout: 10s
+	  external_labels:
+		environment: ip-172-31-8-42.ap-south-1.compute.internal
+
+
+
+	rule_files:
+	  - /etc/prometheus/rules/*.rules
+
+
+	scrape_configs:
+	  - job_name: prometheus
+		metrics_path: /metrics
+		static_configs:
+		- targets:
+		  - ip-172-31-8-42.ap-south-1.compute.internal:9090
+	  - file_sd_configs:
+		- files:
+		  - /etc/prometheus/file_sd/node.yml
+		job_name: node
+	  - job_name: 'node_exporter_metrics'
+		scrape_interval: 5s
+		static_configs:
+		  - targets: ['localhost:9100']
+		  
+	k) sudo systemctl restart prometheus
+	
+	l) ^restart^ status
+	
+
+
+	
+	
