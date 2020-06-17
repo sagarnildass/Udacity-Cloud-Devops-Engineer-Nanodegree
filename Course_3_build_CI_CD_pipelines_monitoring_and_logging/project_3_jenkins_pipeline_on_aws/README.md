@@ -1,6 +1,8 @@
 # Github URL: 
 
-- https://github.com/sagarnildass/static
+- Main: https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_3_build_CI_CD_pipelines_monitoring_and_logging/project_3_jenkins_pipeline_on_aws
+
+- static: https://github.com/sagarnildass/static
 
 ## 1) Introduction
 
