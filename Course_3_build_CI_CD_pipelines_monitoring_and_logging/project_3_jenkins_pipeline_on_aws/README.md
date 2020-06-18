@@ -236,7 +236,7 @@ Credentials need to be created so that they can be used in our pipeline.
 
 5. Add additional code in Jenkinsfile for microscanner and run the pipeline. The picture below shows microscanner correctly implemented.
 
-![Aqua Microscanner](screenshots/screenshot-09.png)
+![Aqua Microscanner](screenshots/screenshot-09-additional-added-microscanner.png)
 
 ### B) Adding additional branches in repo and making a multibranch pipeline
 
