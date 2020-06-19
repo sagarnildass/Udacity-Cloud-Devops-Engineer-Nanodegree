@@ -28,3 +28,5 @@
 - [Lesson 4: Monitoring](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_3_build_CI_CD_pipelines_monitoring_and_logging/lesson_4_monitoring)
 - [Project 3: Jenkins Pipeline on AWS](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_3_build_CI_CD_pipelines_monitoring_and_logging/project_3_jenkins_pipeline_on_aws)
 
+[Course 4: Microservices at Scale using AWS & Kubernetes](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_4_microservices_at_scale_using_aws_and_kubernetes)
+
