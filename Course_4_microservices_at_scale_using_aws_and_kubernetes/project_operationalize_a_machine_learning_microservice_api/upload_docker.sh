@@ -6,10 +6,14 @@
 # Step 1:
 # Create dockerpath
 # dockerpath=<your docker ID/path>
-
-# Step 2:  
+dockerpath=sagarnildass/project_kubernetes
+# Step 2:
 # Authenticate & tag
-echo "Docker ID and Image: $dockerpath"
+export DOCKER_ID_USER="sagarnildass"
+docker login
+docker tag project_kubernetes $DOCKER_ID_USER/project_kubernetes
+docker push $DOCKER_ID_USER/project_kubernetes
 
 # Step 3:
 # Push image to a docker repository
+docker push sagarnildass/project_kubernetes
