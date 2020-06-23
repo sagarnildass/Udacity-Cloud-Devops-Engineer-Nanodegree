@@ -93,3 +93,94 @@ Monitoring is an essential component of DevOps best practices. In this exercise,
 	- Container Health Management
 	- Secrets and Configuration Management
 	- Another advantage is that Kubernetes is cloud agnostic and it could be a solution for companies that are willing to take on the additional complexity to protect against "vendor lockin".
+	
+9. Kubernetes steps: (from the project: these are assuming, there's only one pod and deployment or services running)
+
+	1) kubectl create deployment udacity-project-4 --image=sagarnildass/project_kubernetes
+	
+	2) kubectl get deployments
+	
+	3) kubectl proxy
+	
+    now in a separate terminal:
+    
+    4) curl http://localhost:8001/version
+    
+    5) export POD_NAME=$(kubectl get pods -o go-template --template '{{range.items}}{{.metadata.name}}{{"\n"}}{{end}}')
+    
+    6) echo $POD_NAME
+    
+    7) kubectl describe pods
+    
+    8) curl http://localhost:8001/api/v1/namespaces/default/pods
+    
+    9) kubectl logs $POD_NAME (you will see that the flask app has started)
+    
+    10) kubectl exec $POD_NAME env (list the env variables)
+    
+    11) kubectl exec -ti $POD_NAME bash (to get a bash cmd prompt for the pod's container). Inside the bash: curl localhost:5000 (to see the sklearn homepage returns)
+    
+    A) Expose your app publicly
+    
+    12) kubectl expose deployment/udacity-project-4 --type="NodePort" --port 5000
+    
+    13) kubectl get services
+    
+    14) kubectl describe services/udacity-project-4
+    
+    15) export NODE_PORT=$(kubectl get services/udacity-project-4 -o go-template='{{(index .spec.ports 0).nodePort}}') and then echo $NODE_PORT
+    
+    16) curl $(minikube ip):$NODE_PORT (see your app running)
+    
+    The Deployment created automatically a label for our Pod. With describe deployment command you can see the name of the label
+    
+    17) kubectl describe deployment
+    
+    18) export POD_NAME=$(kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+	
+	To apply a new label we use the label command followed by the object type, object name and the new label:
+	
+	19) kubectl label pod $POD_NAME app=v1
+	
+	20) kubectl get pods -l app=v1
+	
+	To delete Services you can use the delete service command. Labels can be used also here:
+	
+	21)  kubectl delete service udacity-project-4
+	
+	Now this curl will not work.
+	
+	22) curl $(minikube ip):$NODE_PORT
+	
+	This proves that the app is not reachable anymore from outside of the cluster. You can confirm that the app is still running with a curl inside the pod:
+	
+	23) kubectl exec -ti $POD_NAME curl localhost:5000
+	
+	B) Running multiple instances of the app
+	
+	24) to see the replicaset: kubectl get rs
+	
+	Two important columns of this command are:
+
+	DESIRED displays the desired number of replicas of the application, which you define when you create the Deployment. This is the desired state.
+	CURRENT displays how many replicas are currently running.
+	
+	25) kubectl scale deployments/udacity-project-4 --replicas=4
+	
+	26) kubectl get deployments
+	
+	27) kubectl get pods
+	
+	LOAD BALANCING: Let’s check that the Service is load-balancing the traffic. To find out the exposed IP and Port we can use the describe service as we learned in the previously Module:
+	
+	28) kubectl expose deployment/udacity-project-4 --type="NodePort" --port 5000
+	
+	29) kubectl describe services/udacity-project-4
+	
+	30) export NODE_PORT=$(kubectl get services/udacity-project-4 -o go-template='{{(index .spec.ports 0).nodePort}}')
+
+	31) curl $(minikube ip):$NODE_PORT
+	
+	32) kubectl scale deployments/udacity-project-4 --replicas=2
+	
+	33) kubectl get pods

@@ -40,3 +40,31 @@ You can find a detailed [project rubric, here](https://review.udacity.com/#!/rub
 * Setup and Configure Kubernetes locally
 * Create Flask app in Container
 * Run via kubectl
+
+### Additional Steps:
+
+1. The following video shows the autoscaling and load balancing of the Kubernetes application:
+
+![Kubernetes load balancing](video_files/kubernetes_autoscaling_and_load_balancing.gif)
+
+The steps are as follows:
+
+	a) kubectl scale deployments/udacity-project-4 --replicas=4
+	
+	b) kubectl get deployments
+	
+	c) kubectl get pods
+	
+	LOAD BALANCING: Let’s check that the Service is load-balancing the traffic. To find out the exposed IP and Port we can use the describe service as we learned in the previously Module:
+	
+	d) kubectl expose deployment/udacity-project-4 --type="NodePort" --port 5000
+	
+	e) kubectl describe services/udacity-project-4
+	
+	f) export NODE_PORT=$(kubectl get services/udacity-project-4 -o go-template='{{(index .spec.ports 0).nodePort}}')
+
+	g) curl $(minikube ip):$NODE_PORT
+	
+	h) kubectl scale deployments/udacity-project-4 --replicas=2
+	
+	i) kubectl get pods
