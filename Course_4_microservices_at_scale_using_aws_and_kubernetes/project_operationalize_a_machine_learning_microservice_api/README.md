@@ -45,7 +45,7 @@ You can find a detailed [project rubric, here](https://review.udacity.com/#!/rub
 
 1. The following video shows the autoscaling and load balancing of the Kubernetes application:
 
-![Kubernetes load balancing](video_files/kubernetes_autoscaling_and_load_balancing.mp4)
+![Kubernetes load balancing](https://youtu.be/J2-Wgi6N4Y4)
 
 The steps are as follows:
 
