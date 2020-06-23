@@ -1,4 +1,4 @@
-<include a CircleCI status badge, here>
+[![sagarnildass](https://circleci.com/gh/sagarnildass/udacity-cloud-devops-project-4-kubernetes.svg?style=svg)](https://app.circleci.com/pipelines/github/sagarnildass/udacity-cloud-devops-project-4-kubernetes/9/workflows/54c52572-7846-4c2d-afa6-b7fe114c81ab)
 
 ## Project Overview
 

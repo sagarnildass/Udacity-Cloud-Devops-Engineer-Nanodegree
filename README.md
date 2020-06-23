@@ -35,4 +35,5 @@
 - [Lesson 3: Containerization of existing application](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_4_microservices_at_scale_using_aws_and_kubernetes/lesson_3_containerization_of_existing_application)
 - [Lesson 4: Container orchestration with Kubernetes](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_4_microservices_at_scale_using_aws_and_kubernetes/lesson_4_container_orchestration_with_kubernetes)
 - [Lesson 5: Operationalizing Microservices](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_4_microservices_at_scale_using_aws_and_kubernetes/lesson_5_operationalizing_microservices)
+- [Project 4: Operationalize a Machine Learning Microservice API](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_4_microservices_at_scale_using_aws_and_kubernetes/project_operationalize_a_machine_learning_microservice_api)
 
