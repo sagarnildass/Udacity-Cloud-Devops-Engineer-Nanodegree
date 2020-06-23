@@ -71,3 +71,7 @@ The steps are as follows:
 	h) kubectl scale deployments/udacity-project-4 --replicas=2
 	
 	i) kubectl get pods
+	
+2. Graffana monitoring set up: We have configure graffana and prometheus so that we can monitor different metrics related to the app. The following screenshot shows a sample graffana dashboard with the app deployed and running.
+
+![Graffana Monitoring](screenshots/graffana_monitoring_for_app.png)
