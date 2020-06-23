@@ -75,3 +75,9 @@ The steps are as follows:
 2. Graffana monitoring set up: We have configure graffana and prometheus so that we can monitor different metrics related to the app. The following screenshot shows a sample graffana dashboard with the app deployed and running.
 
 ![Graffana Monitoring](screenshots/graffana_monitoring_for_app.png)
+
+3. Locust load test: A locust load testing is performed on the app locally. Following are the screenshots depicting that:
+
+![Locust Home Page](screenshots/locust_screenshot_1.png)
+
+![Locust first Page](screenshots/locust_screenshot_2.png)
