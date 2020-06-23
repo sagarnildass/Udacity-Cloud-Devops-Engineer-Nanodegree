@@ -47,6 +47,9 @@ You can find a detailed [project rubric, here](https://review.udacity.com/#!/rub
 
 [Kubernetes load balancing](https://www.youtube.com/watch?v=J2-Wgi6N4Y4&feature=youtu.be)
 
+[![Kubernetes Load Balancing](https://img.youtube.com/vi/J2-Wgi6N4Y4/maxresdefault.jpg)](https://www.youtube.com/watch?v=J2-Wgi6N4Y4&feature=youtu.be)
+
+
 The steps are as follows:
 
 	a) kubectl scale deployments/udacity-project-4 --replicas=4
