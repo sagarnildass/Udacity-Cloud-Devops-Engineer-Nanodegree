@@ -1,0 +1,95 @@
+1. Overview of Kubernetes
+	What is Kubernetes? It is an open source orchestration system for containers developed by Google and open sourced in 2014. Kubernetes is a useful tool for working with containerized applications. Given our previous work with Docker containers and containerizing an app, working with Kubernetes is the next logical step. Kubernetes was born out of the lessons learned in scaling containerized apps at Google, and is used for automating deployment, scaling and managing such containerized applications.
+
+	What are the Benefits of using Kubernetes?
+		Kubernetes is the standard for container orchestration. All major cloud providers support Kubernetes. Amazon through Amazon EKS, Google through Google Kubernetes Engine GKE and Microsoft through Azure Kubernetes Service (AKS). Kubernetes is also a framework for running distributed systems at "planet scale". Google uses it to run billions of containers a week.
+
+		
+	A few of the Capabilities of Kubernetes include:
+
+		- High availability architecture
+		- Auto-scaling
+		- Rich Ecosystem
+		- Service discovery
+		- Container health management
+		- Secrets and configuration management
+	The downside of these features is the high complexity and learning curve of Kubernetes. You can read more about the features of Kubernetes through the official documentation.
+
+	What are the Basics of Kubernetes?
+	    - The core operations involved in Kubernetes include creating a Kubernetes Cluster, deploying an application into the cluster, exposing an application ports, scaling an application and updating an application.
+
+
+	What is the Kubernetes (Cluster) Architecture?
+	    - The core of Kubernetes is the cluster. Containers run in the cluster. The core components of the cluster include a cluster master and nodes. Inside nodes there is another hierarchy. This is shown in the diagram. A Kubernetes node can contain multiple pods, which in turn can contain multiple containers and/or volumes.
+
+	How do you Set Up a Kubernetes Cluster?
+		- There are two main methods:
+
+			- Set up a local cluster (preferably with Docker Desktop)
+			- Provision a cloud cluster:
+				- Amazon through Amazon EKS
+				- Google through Google Kubernetes Engine GKE
+				- Microsoft through Azure Kubernetes Service (AKS).
+		If you are using Docker and have enabled kubernetes then you already have a standalone Kubernetes server running. This would be the recommended way to get started with Kubernetes clusters.
+		
+2. Demo: Go to https://kubernetes.io/docs/tutorials/kubernetes-basics/create-cluster/cluster-interactive/ and follow along. 
+
+	a) minikube version
+	
+	b) minikube start : You now have a running Kubernetes cluster in your online terminal. Minikube started a virtual machine for you, and a Kubernetes cluster is now running in that VM.
+	
+	c) kubectl version: The client version is the kubectl version; the server version is the Kubernetes version installed on the master. You can also see details about the build.
+	
+	d) kubectl cluster-info: to see the status of the cluster
+	
+	e) kubectl get nodes: This command shows all nodes that can be used to host our applications. 
+	
+3. The Prometheus Operator helps to integrate Prometheus monitoring directly with Kubernetes. There is also the kube-prometheus package which includes additional helpful components (including the Prometheus Operator) for monitoring, as well as the Prometheus Adapter.
+
+4. Exercise: Prometheus Monitoring
+Monitoring is an essential component of DevOps best practices. In this exercise, you will set up Prometheus Monitoring.
+
+	Alerting Theory
+	For this exercise you will:
+
+	- Set up Prometheus monitoring.
+	- Consider a normal distribution, "six sigma" and the 68-95-99.7 rule. Computer systems events are often normally distributed, meaning that all events within three standard deviations from the mean occur with 99.7 of the occurrences.
+	- Design a process that alerts senior engineers when events are greater than three standard deviations from the mean and write up how the alerts should work, i.e.
+	- Who should get a page when an event is more significant than three standard deviants from the mean?
+	- Should there be a backup person who gets alerted if the first person doesn’t respond within five minutes?
+	- Should an alert wake up a team member at one standard deviation? What about two?
+	
+5. Exercise: Logging
+	Logging is an important concept to master for professional software development. Test your skills in this exercise by getting the logs from a running pod.
+
+	Instructions
+		- Start your kubernetes application
+		- Grab your application logs for your pod (given a pod named my-pod) by running this command: kubectl logs my-pod
+		- It's that easy to gather your logs with Kubernetes!
+		
+6. Autoscaling with CPU or Memory
+	If you did the Scaling Demo earlier, you already saw one way to scale your apps:
+
+	kubectl scale {deployment name} --replicas={desired number of replicas}
+
+	The Horizontal Pod Autoscaler does this work for you.
+
+	One of the "killer" features of Kubernetes is the ability to set up auto-scaling via the Horizontal Pod Autoscaler. How does this work? The Kubernetes HPA (Horizontal Pod Autoscaler) will automatically scale the number of pods (remember they can contain multiple containers) in a replication controller, deployment or replica set. The scaling is based on CPU utilization, memory or custom metrics defined in the Kubernetes Metrics Server.
+	
+7. The Horizontal Pod Autoscaler built into Kubernetes is incredibly useful for expanding the number of Pods available based on processing or memory needs. The underlying algorithm itself, somewhat simplified, is as follows:
+
+	newNumPods = ceil(currentNumPods * (currentMetric / desiredMetric))
+
+	This means, if by some metric, we are currently at 2.5X our desired metric level, we will scale up our number of pods by 2.5X, rounded up to the nearest one pod.
+	
+8. Why Kubernetes?
+	There are many compelling reasons to use Kubernetes. Let's summarize them:
+
+	- Created, Used and Open Sourced by Google
+	- High Availability Architecture
+	- Auto-Scaling is Built In
+	- Rich Ecosystem
+	- Service Discovery
+	- Container Health Management
+	- Secrets and Configuration Management
+	- Another advantage is that Kubernetes is cloud agnostic and it could be a solution for companies that are willing to take on the additional complexity to protect against "vendor lockin".

@@ -121,6 +121,16 @@
 	
 	l) ^restart^ status
 	
+	
+5. Note: The above method of prometheus and graffana does not work. 
+   This does: 
+   
+   a) Prometheus: https://www.digitalocean.com/community/tutorials/how-to-install-prometheus-on-ubuntu-16-04
+   
+   b) Graffana: https://www.scaleway.com/en/docs/configure-prometheus-monitoring-with-grafana/
+   
+Prometheus is running on localhost:9090 and graffana on localhost:3000. Default username and password for graffana is admin/admin
+	
 
 
 	

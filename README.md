@@ -30,3 +30,9 @@
 
 [Course 4: Microservices at Scale using AWS & Kubernetes](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_4_microservices_at_scale_using_aws_and_kubernetes)
 
+- [Lesson 1: Deploy an event driven microservice](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_4_microservices_at_scale_using_aws_and_kubernetes/lesson_1_deploy_an_event_driven_microservice)
+- [Lesson 2: Using Docker format containers](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_4_microservices_at_scale_using_aws_and_kubernetes/lesson_2_using_docker_format_containers)
+- [Lesson 3: Containerization of existing application](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_4_microservices_at_scale_using_aws_and_kubernetes/lesson_3_containerization_of_existing_application)
+- [Lesson 4: Container orchestration with Kubernetes](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_4_microservices_at_scale_using_aws_and_kubernetes/lesson_4_container_orchestration_with_kubernetes)
+- [Lesson 5: Operationalizing Microservices](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_4_microservices_at_scale_using_aws_and_kubernetes/lesson_5_operationalizing_microservices)
+

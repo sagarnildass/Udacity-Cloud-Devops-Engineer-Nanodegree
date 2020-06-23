@@ -1,0 +1,56 @@
+1. Operationalizing a Microservice Overview
+	One important factor in developing a microservice is to think about the feedback loop. In this diagram, a GitOps style workflow is described.
+
+	- Application is stored in Git.
+	- Changes in Git trigger the continuous delivery server which then tests and deploys the code to a new environment. This environment is configured as Infrastructure as Code (IaC).
+	- The microservice, which could be a containerized service running in Kubernetes or a FaaS (Function as a Service) running on AWS Lambda, has logging, metrics, and instrumentation.
+	A load test using a tool like locust.
+	- When the performance and auto-scaling is verified the code is merged to production and deployed
+
+	
+2. What are some of the items that could be alerted on with Kubernetes?
+
+	- Alerting on application layer metrics
+	- Alerting on services running on Kubernetes
+	- Alerting on the Kubernetes infrastructure
+	- Alerting on the host/node layer
+	
+3. How could you collect metrics with Kubernetes and Prometheus? Here is a diagram that walks through a potential workflow. Note that there are two pods. One pod is dedicated to the Prometheus collector and the second pod has a "sidecar" Prometheus container that sits alongside the Flask application. This all propagates up to a centralized monitoring system that visualizes the health of the clusters and trigger alerts.
+
+4. Disaster Recovery
+	An important but often overlooked part of building production software is designing for failure. There is an expression that the only two certainties in life are death and taxes. We can add another certainty to the list, software system failure. In the AWS whitepaper Serverless Application Lens they discuss five pillars of a well architected serverless system: operational excellence, reliability, performance efficiency and cost optimization. It is highly recommended to read this guide thoroughly.
+
+	- Five Pillars of a Well Architected Serverless System
+		- Operational Excellence
+			How do you understand the health of a serverless application? One method is to use metrics and alerts. These metrics could include business metrics, customer experience metrics and other metrics. Another method is to have centralized logging. This allows for unique transactions ideas that can narrow down critical failures.
+
+		- Security
+		    Have proper controls and using the POLP (Principle of Least Privilege). Only give out the privileges needed to complete a task to a user, service or developer. Protect data at rest and in transit.
+
+		- Reliability
+		    Plan on the fact that failure will occur. Have retry logic for key service and build a system that can queue work when a service is unavailable. Use highly available services that store multiple copies of the data like Amazon S3 and then archive key data to services that can store immutable backups. Ensure that you have tested these backups and validated them on a recurring basis (say quarterly)
+
+		- Performance
+		    One key way to validate performance is to load test an application that has proper instrumentation and logging. Several load test tools include: Apache Bench, Locust and load test services like loader.io
+
+		- Cost
+		    Serverless technologies like AWS Lambda fit well with cost optimization because they are driven by usage. Events trigger the execution of services and this saves a tremendous amount on cost if the architecture is designed to take advantage of this.
+
+		- Summary of Serverless Best Practices
+		    One of the advantages of serverless application development is that it encourages the use of IaC and GitOps on top of highly durable infrastructure. This means that entire environments can be spun up to mitigate severe unplanned outages in geographic regions. Additionally, the use of automated load testing alongside comprehensive instrumentation and logging leads to environments that are robust in the face of disasters.
+		    
+5. Load testing exercise:
+
+	a) Install locust: pip install locust
+	
+	b) clone this repo: https://github.com/noahgift/docker-flask-locust
+	
+	c) start python app.py in one terminal 
+	
+	d) In another terminal, type locust and run in the same dir. It will search for the locustfile and run it.
+	
+	e) We go to localhost:8089
+	
+	f) We fill up the form: user-10, user/sec-1, host:localhost:8081 (where our flask app is running)
+	
+	e) 

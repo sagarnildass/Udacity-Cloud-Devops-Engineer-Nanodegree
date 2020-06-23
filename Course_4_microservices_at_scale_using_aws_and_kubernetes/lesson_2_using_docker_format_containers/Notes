@@ -48,3 +48,289 @@ Below are the steps again to refresh your memory! In the steps below, venv is th
 	
 4. Makefile: Go to Lesson-2-Docker-format-containers/myrepo
 
+	a) make install
+	
+	b) make lint
+	
+- Setup Makefile
+	Just like vim, mastering Makefiles can take years, but a minimalistic approach provides immediate benefits. A main benefit to a Makefile is the ability to enforce a convention. If everytime you work a project you follow a few simple steps, it reduces the possibility of errors in building and testing a project.
+
+	A typical Python project can be improved by adding a Makefile with the following steps: make setup, make install, make test, make lint and make all.
+
+- Makefile Creation Recap
+	Let’s recap the key concepts of creating a Makefile.
+
+	- setup: You have seen most of this line before, which is dealing with our Python 3 virtual environment.
+	- install: This installs the requirements for our environment. In our case, it also install the pytest and pylint libraries used later on in the Makefile.
+	- test: This is broken into two parts for testing.
+	- First, it will use .py files in the tests directory. The -vv flag ensures short test durations are still shown (see documentation), while the -cov flag helps to calculate what the test coverage of the code is (see documentation) in a given directory.
+	- The second line is used to test Jupyter Notebook cells. The --nbval flag makes pytest pay attention to jupyter notebooks (see documentation).
+	- lint: This will lint what is in the myrepolib directory, as well as the cli.py and web.py files in our current directory (see video). The --disable=R,C is used to disable the "convention" (C) and "refactor" (R) message classes (see related Stack Overflow post).
+	- all: You may notice this line looks a little different than the above lines, with the commands on the same line. This will execute our install, lint and test commands.
+
+- Makefile Usage Recap
+	Let’s recap the key concepts of a using a Makefile.
+
+	Once the Makefile is created, you can use:
+
+	make install
+	make lint
+	to install dependencies and test your code.
+	
+5. Linting and CircleCI
+
+- Using CircleCI
+Here are the steps Noah took in the above video:
+
+- Added to the Makefile:
+
+- validate-circleci:
+    circleci config process .circleci/config.yml
+
+- run-circleci-local:
+    circleci local execute
+
+- lint: # This line should already be there with regular pylint
+    hadolint path/to/Dockerfile
+- Runs hadolint Dockerfile
+- Uses the config.yml file within a .circleci directory
+- In the parent directory, runs make run-circleci-local to simulate what will happen in the remote CircleCI environment
+- Uses the CircleCI website (a related blog post is linked below) to test remotely
+
+- Notes about how to run this example
+These instructions work the best on a Linux or OS X system or inside a Docker container itself. One way to dramatically simplify installation and configuration in the Cloud is to use a Cloud based development environment like AWS Cloud9. This was shown in the AWS Lambda examples in Lesson 1. This allows you to eliminate a huge portion of the problems you can run into when installing software. If you are expert at installing software on Linux, Windows or OS X, then this may not matter. If you want the easiest path to running these commands, use AWS Cloud9.
+
+6. Setting up in cloud 9
+
+ 	A) Docker image build 1
+ 	
+		a) Go to cloud 9
+	
+		b) Create a new env (dockerbuild)
+	
+		c) select m5 large and amazon linux and create env
+	
+		d) Create a repo dockerprojudacitylesson2
+	
+		e) Initialize with readme and gitignore as python
+	
+		f) do ssh-keygen -t rsa in cloud 9
+	
+		g) copy the public key and go to github account settings. In gpg and ssh keys , add this key and name it dockerproj
+	
+		h) go back to cloud 9 and git clone git@github.com:sagarnildass/dockerprojudacitylesson2.git
+	
+		i) cd dockerprojudacitylesson2
+	
+		j) touch Makefile, touch requirements.txt, touch Dockerfile, touch app.py
+	
+		h) In the dockerfile, paste this:
+	
+		FROM python:3.7.3-stretch
+
+		# Working dir
+		WORKDIR /app
+
+		# Copy source code to working directory
+		COPY . app.py /app/
+
+		# Install packages from requirements.txt
+		# Hadolint ignore=DL3013
+		RUN pip install --upgrade pip && \
+			pip install --trusted-host pypi.python.org -r requirements.txt
+		
+		i) make app.py like this:
+	
+		#!/usr/bin/env python
+		import click
+
+		@click.command()
+		def hello():
+			click.echo('Hello World')
+		
+		if __name__ == '__main__':
+			hello()
+
+		j) chmod +x app.py 
+	
+		k) make the Makefile like this:
+	
+		## Student instructions
+		# Dockerfile should pass hadolint
+		# app.py should pass pylint
+		# optional, but recommended, build a simple integration test
+
+		setup:
+			# Create python virtualenv & source it
+			# source ~/.udacity-devops/bin/activate
+			python3 -m venv ~/.dockerproj
+
+		install:
+			# This should be run from inside a virtualenv
+			pip install --upgrade pip &&\
+				pip install -r requirements.txt
+		
+		validate-circleci:
+			# See https://circleci.com/docs/2.0/local-cli/#processing-a-config
+			circleci config process .circleci/config.yml
+
+		run-circleci-local:
+			# See https://circleci.com/docs/2.0/local-cli/#running-a-job
+			circleci local execute
+
+
+		test:
+			# Additional, optional, tests could go here
+			#python -m pytest -vv --cov=myrepolib tests/*.py
+			#python -m pytest --nbval notebook.ipynb
+
+		lint:
+			# See local hadolint install instructions:   https://github.com/hadolint/hadolint
+			# This is linter for Dockerfiles
+			hadolint Dockerfile
+			# This is a linter for Python source code linter: https://www.pylint.org/
+			# This should be run from inside a virtualenv
+			pylint --disable=R,C,W1203 app.py
+
+		all: install lint test
+
+				all: install lint test
+	
+		l) In the terminal: sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.17.5/hadolint-Linux-x86_64 && sudo chmod +x /bin/hadolint
+	
+		m) make lint
+	
+		n) python3 -m venv ~/.dockerprojudacitylesson2 && source ~/.dockerprojudacitylesson2/bin/activate
+	
+		o) make install
+	
+		p) So now we have all set up and now we will make a container that will run this app.
+	
+		q) chmod +x Dockerfile && docker build --tag=app .
+	
+		r) docker image ls (your file will be listed) 
+	
+		s) docker run -it app bash (Now here if we do a ls, we will see exactly the same files we used for build. Now if we run python app.py, we will see hello world)
+	
+	B) Circle CI
+	
+		a) mkdir .circleci
+		
+		b) touch .circleci/config.yml
+		
+		c) paste this:
+		
+		# Python CircleCI 2.0 configuration file
+		#
+		# Check https://circleci.com/docs/2.0/language-python/ for more details
+		#
+		version: 2
+		jobs:
+		  build:
+			docker:
+			# Use the same Docker base as the project
+			  - image: python:3.7.3-stretch
+
+			working_directory: ~/repo
+
+			steps:
+			  - checkout
+
+			  # Download and cache dependencies
+			  - restore_cache:
+				  keys:
+				    - v1-dependencies-{{ checksum "requirements.txt" }}
+				    # fallback to using the latest cache if no exact match is found
+				    - v1-dependencies-
+
+			  - run:
+				  name: install dependencies
+				  command: |
+				    python3 -m venv venv
+				    . venv/bin/activate
+				    make install
+				    # Install hadolint
+				    wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
+				        chmod +x /bin/hadolint
+
+			  - save_cache:
+				  paths:
+				    - ./venv
+				  key: v1-dependencies-{{ checksum "requirements.txt" }}
+
+			  # run lint!
+			  - run:
+				  name: run lint
+				  command: |
+				    . venv/bin/activate
+				    make lint           
+
+	
+		d) Install circle ci locally: https://circleci.com/docs/2.0/local-cli/
+		
+			i) cd /tmp
+			
+			ii) wget https://github.com/CircleCI-Public/circleci-cli/releases/download/v0.1.8302/circleci-cli_0.1.8302_linux_amd64.tar.gz
+			
+			iii) tar -zxvf circleci-cli_0.1.8302_linux_amd64.tar.gz 
+			
+			iv) cd circleci-cli_0.1.8302_linux_amd64
+			
+			v) mv circleci ~/
+			
+			vi) cd ~
+			
+			vii) mv circleci environment/
+			
+			viii) cd environment
+			
+			ix) mv circleci dockerprojudacitylesson2/
+			
+			x) cd dockerprojudacitylesson2/
+			
+			xi) mv circleci /tmp
+			
+			xii) git add . , git commit -m "addin in docker project", git push
+			
+			xiii) go to circleci.com, add this project and build this project (add config.yml)
+			
+7. Running Dockerfiles
+	- Using "base" images
+		- One of the advantages of the Docker workflow for developers is the ability to use certified containers from the "official" development teams. In this diagram a developer uses the official Python base image which is developed by the core Python developers. This is accomplished by the FROM statement which loads in a previously created container image.
+		
+		- As the developer makes changes to the Dockerfile, they test locally, then push the changes to a private Docker Hub repo. After this, the changes can be used by a deployment process to a Cloud or by another developer.
+		
+	- Docker Cheat Sheet
+		- Use docker image ls to see all of your created Docker images
+		- docker run -it {image name} bash ran Noah's Docker image - This is an incredibly powerful step where we can test the app locally in a completely isolated env.
+			
+	- Steps:
+	
+		a) Go to class-demos/demos/flask-sklearn-student-starter
+		
+		b) complete the docker file and run_docker.sh file
+		
+		c) try to run the lines of run_docker.sh locally
+		
+8. Deploying to amazon ECR: With a build server, local Docker file and lint files, we have everything built for our Python environment. The final step is to get this environment & microservice we've created deployed into an Amazon environment. We'll use Amazon's Elastic Container Registry (ECR) to do so. This allows us to put the whole bundled container and application onto Amazon.
+
+Steps:
+
+	a) Go to aws ecr
+	
+	b) create repo
+	
+	c) In your local cmdline: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 960920920983.dkr.ecr.ap-south-1.amazonaws.com
+	
+	d) docker build -t udacity_docker .
+
+	e) docker tag udacity_docker:latest 960920920983.dkr.ecr.ap-south-1.amazonaws.com/udacity_docker:latest
+
+	f) docker push 960920920983.dkr.ecr.ap-south-1.amazonaws.com/udacity_docker:latest
+
+	g) Now it will be pushed to ECR
+	
+	
+
+
+		

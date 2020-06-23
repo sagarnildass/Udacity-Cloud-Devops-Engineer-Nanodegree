@@ -1,0 +1,82 @@
+1. In the Lesson-3-Containerization directory, if we run make install and then make start-api, it will start the swagger app on localhost.
+
+2. Setting up cloud 9
+
+	1. Go to cloud 9 and create a new env called 'hello'. Leave all default.
+	
+	2. Create a public repo called hello and initialize with readme. For gitignore, select python
+	
+	3. In cloud9, ssh-keygen -t rsa. Copy the key manually by cat command.
+	
+	4. Add this key to github from settings
+	
+	5. In cloud 9: git clone git@github.com:sagarnildass/hello.git
+	
+	6. git config --global user.name "Sagarnil Das" 
+	
+	7. git config --global user.email sagarnildass@gmail.com
+	
+	8. python3 -m venv ~/.hello
+	
+	9. source ~/.hello/bin/activate
+	
+	10. We would like to automate "cd" ing into git repo and source the venv
+	
+	11. deactivate
+	
+	12. In .bashrc file, we add this at the end: alias hello="cd /home/ec2-user/environment/hello && source ~/.hello/bin/activate"
+	
+	13. source ~/.bashrc 
+	
+	14. Now if we type "hello", it will go to that dir and activate that env.
+	
+	15. touch Makefile (and paste the contents of previous lesson's makefile (inside myrepo))
+	
+	16. Change pylint --disable=R,C myrepolib cli web to pylint --disable=R,C hello.py
+	
+	17. touch requirements.txt and inside it put pylint
+	
+	18. make install
+	
+	19. touch hello.py
+	
+	def myfunc():
+		return 1
+		
+	print(myfunc())
+	
+	20. make lint
+	
+	21. push this to git
+	
+	22. go to circle ci website and add project.
+	
+	23. in cloud9, mkdir .circleci
+	
+	24. for config.yml inside .circleci, copy the file from previous lesson myrepo folder.
+	
+	25. Push to github
+	
+	26. Go back to cloud 9, and redo the step for set up project for "hello" and build. Select "add manually" for config file.
+	
+	27. After the run succeeds, you canprint a status batch. The template is:
+	
+	[![<ORG_NAME>](https://circleci.com/<VCS>/<ORG_NAME>/<PROJECT_NAME>.svg?style=svg)](<LINK>)
+
+	28. So for your project: [![sagarnildass](https://circleci.com/gh/sagarnildass/hello.svg?style=svg)](https://app.circleci.com/pipelines/github/sagarnildass/hello/1/workflows/efce1e77-7ded-4647-b8f9-4d7933f5a5da)
+
+
+	29. Paste this in README file and push to git.
+	
+3. Copying an application: We added this line: COPY . nlib /app/ to the Dockerfile as the main web.py is dependent on this folder.
+
+4. App setup: More on Ports
+	Ports are not usually just randomly assigned numbers. Many ports are used for specific activities in networking. Port 80 is the commonly used port number for HTTP requests, which is why we are exposing that port to the host computer - it's where the Flask app is listening for requests. You may also see other ports, such as port 8080, used with different applications. What this means is that the server is listening on that port, so a request to that server must also append the "special" port number to an HTTP request (such as example.website.com:8080), so that the sending client uses port 8080, instead of the normal HTTP port 80.
+	
+5. Exercise: Build and deploy
+
+	a) docker build --tag=api .
+	
+	b) docker run -p 8000:5001 api
+	
+	c) now check at localhost:8000 and see the app running.
