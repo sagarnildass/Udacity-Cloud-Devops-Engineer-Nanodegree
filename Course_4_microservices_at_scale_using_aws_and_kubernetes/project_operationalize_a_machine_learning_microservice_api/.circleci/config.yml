@@ -13,7 +13,7 @@ working_directory: ~/repo/Course_4_microservices_at_scale_using_aws_and_kubernet
 
 steps:
 - checkout
-    path: ~/repo
+path: ~/repo
 
 # Download and cache dependencies
 - restore_cache:
