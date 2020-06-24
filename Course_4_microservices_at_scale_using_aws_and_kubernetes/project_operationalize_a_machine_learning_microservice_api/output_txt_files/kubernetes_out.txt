@@ -1,12 +1,14 @@
-[2020-06-23 12:32:35,965] INFO in app: JSON payload: 
-{'CHAS': {'0': 0}, 'RM': {'0': 6.575}, 'TAX': {'0': 296.0}, 'PTRATIO': {'0': 15.3}, 'B': {'0': 396.9}, 'LSTAT': {'0': 4.98}}
-[2020-06-23 12:32:35,974] INFO in app: Inference payload DataFrame: 
-   CHAS     RM    TAX  PTRATIO      B  LSTAT
-0     0  6.575  296.0     15.3  396.9   4.98
-[2020-06-23 12:32:35,981] INFO in app: Scaling Payload: 
-   CHAS     RM    TAX  PTRATIO      B  LSTAT
-0     0  6.575  296.0     15.3  396.9   4.98
-[2020-06-23 12:32:35,983] INFO in app: PREDICTION: [20.35373177134412]
-127.0.0.1 - - [23/Jun/2020 12:32:35] "POST /predict HTTP/1.1" 200 -
-127.0.0.1 - - [23/Jun/2020 12:32:49] "GET / HTTP/1.1" 200 -
+(base) sagarnil@bluedream:~/python_notebooks/udacity_cloud_devops_engineer_nanodegree/Course_4_microservices_at_scale_using_aws_and_kubernetes/project_operationalize_a_machine_learning_microservice_api$ ./make_prediction.sh 
+Port: 8081
+{
+  "prediction": [
+    20.35373177134412
+  ]
+}
+
+(base) sagarnil@bluedream:~/python_notebooks/udacity_cloud_devops_engineer_nanodegree/Course_4_microservices_at_scale_using_aws_and_kubernetes/project_operationalize_a_machine_learning_microservice_api$ kubectl port-forward udacity-project-4-new 8081:5000
+Forwarding from 127.0.0.1:8081 -> 5000
+Forwarding from [::1]:8081 -> 5000
+Handling connection for 8081
+Handling connection for 8081
 
