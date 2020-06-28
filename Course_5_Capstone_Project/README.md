@@ -1,4 +1,8 @@
-# Project: Capstone
+# Project: Capstone (Udacity Cloud DevOps Nanodegree)
+
+This is the compliment I received from the reviewer :D
+
+![Reviewer compliment](cloud_devops_capstone_compliment.png)
 
 In this project we will apply the skills and knowledge which were developed throughout the Cloud DevOps Nanodegree program. These include:
 
