@@ -37,5 +37,5 @@
 - [Lesson 5: Operationalizing Microservices](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_4_microservices_at_scale_using_aws_and_kubernetes/lesson_5_operationalizing_microservices)
 - [Project 4: Operationalize a Machine Learning Microservice API](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_4_microservices_at_scale_using_aws_and_kubernetes/project_operationalize_a_machine_learning_microservice_api)
 
-[Course 5: Capstone Project](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_5_Capstone_Project)
+[Course 5: Capstone Project](https://github.com/sagarnildass/Udacity-Cloud-Devops-Engineer-Nanodegree/tree/master/Course_5_Capstone_Project) - The standalone repo can be found here: https://github.com/sagarnildass/cloud-devops-capstone-project
 
