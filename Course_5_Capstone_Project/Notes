@@ -1,0 +1,25 @@
+Manual
+
+1. eksctl create cluster --name capstoneclustersagarnil --version 1.16 --nodegroup-name standard-workers --node-type t2.medium --nodes 3 --nodes-min 1 --nodes-max 4 --node-ami auto --region ap-south-1
+
+2. aws eks --region ap-south-1 update-kubeconfig --name capstoneclustersagarnil (For writing this cluster info in .kube/config)
+
+3. Dockerize the app and push it.
+
+4. kubectl apply -f capstone-k8s.yaml
+
+5. export POD_NAME=$(kubectl get pods -o go-template --template '{{range.items}}{{.metadata.name}}{{"\n"}}{{end}}')
+
+6. kubectl logs $POD_NAME (see if the app is up and running)
+
+7. kubectl exec -ti $POD_NAME bash && curl localhost:9080 (see if the app is running)
+
+8. kubectl describe services/capstone-app-sagarnil
+
+9. Check the LoadBalancer Ingress address and the port no. So the final app address will be LoadBalancer Ingress address:9080
+
+10. Now create a jenkins file and run the first run
+
+11. Added slack support and build trigger on push
+
+12. Mapped route 53 to loadbalancer DNS.
